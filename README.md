@@ -30,11 +30,7 @@ git clone https://github.com/zam-cv/hackmx
 code hackmx
 ```
 
-4. Open the project in a container
-
-- Press `F1` and select `Dev Containers: Reopen in Container`
-
-5. Set environment variables
+4. Set environment variables
 
 - Create a `.env` file inside the backend folder and add the following environment variables:
 
@@ -48,6 +44,10 @@ POSTGRES_USER=admin
 POSTGRES_PASSWORD=awdrqwer12
 POSTGRES_DB=hackmx
 ```
+
+5. Open the project in a container
+
+- Press `F1` and select `Dev Containers: Reopen in Container`
 
 6. Install the project dependencies
 
