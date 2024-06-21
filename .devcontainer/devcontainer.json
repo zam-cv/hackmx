@@ -31,7 +31,8 @@
         },
         "gitlens.codeLens.enabled": false,
         "terminal.integrated.showExitAlert": false,
-        "github.copilot.editor.enableAutoCompletions": true
+        "github.copilot.editor.enableAutoCompletions": true,
+        "remote.autoForwardPorts": false
       },
       "extensions": [
         "GitHub.copilot",
@@ -51,10 +52,11 @@
       ]
     }
   },
+  "shutdownAction": "stopCompose",
   "forwardPorts": [
-    3000,
-    5432
-  ],
-  "postCreateCommand": "echo 'Welcome!'",
-  "shutdownAction": "stopCompose"
+    5173,
+    "database-server:5432",
+    8080,
+    1420
+  ]
 }

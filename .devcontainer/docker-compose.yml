@@ -4,12 +4,8 @@ services:
     restart: unless-stopped
     volumes:
       - database-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: awdrqwer12
-      POSTGRES_DB: hackmx
-    ports:
-      - "5432:5432"
+    env_file:
+      - ../backend/.env
 
   dev-server:
     build:
@@ -17,8 +13,6 @@ services:
       dockerfile: .devcontainer/Dockerfile
     depends_on:
       - database-server
-    ports:
-      - "8080:8080"
     command: sleep infinity
     volumes:
       - cargo-cache:/usr/local/cargo
