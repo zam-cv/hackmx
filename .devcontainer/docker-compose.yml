@@ -1,0 +1,29 @@
+services:
+  database-server:
+    image: postgres:13
+    restart: unless-stopped
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: awdrqwer12
+      POSTGRES_DB: hackmx
+    ports:
+      - "5432:5432"
+
+  dev-server:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    depends_on:
+      - database-server
+    ports:
+      - "8080:8080"
+    command: sleep infinity
+    volumes:
+      - cargo-cache:/usr/local/cargo
+      - ..:/workspace:cached
+
+volumes:
+  database-data:
+  cargo-cache:

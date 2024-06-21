@@ -1,0 +1,60 @@
+{
+  "name": "HackMx",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "dev-server",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.minimap.enabled": false,
+        "editor.fontSize": 15,
+        "debug.console.fontSize": 13,
+        "terminal.integrated.fontSize": 15,
+        "editor.tabSize": 2,
+        "editor.indentSize": "tabSize",
+        "rust-analyzer.inlayHints.typeHints.enable": false,
+        "rust-analyzer.inlayHints.parameterHints.enable": false,
+        "rust-analyzer.inlayHints.closingBraceHints.enable": false,
+        "rust-analyzer.inlayHints.chainingHints.enable": false,
+        "rust-analyzer.inlayHints.closureCaptureHints.enable": false,
+        "[rust]": {
+          "editor.defaultFormatter": "rust-lang.rust-analyzer",
+          "editor.semanticHighlighting.enabled": false
+        },
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "workbench.colorTheme": "Starfall Palenight",
+        "workbench.iconTheme": "symbols",
+        "gitlens.currentLine.enabled": false,
+        "gitlens.hovers.currentLine.over": "line",
+        "workbench.editorAssociations": {
+          "git-rebase-todo": "gitlens.rebase"
+        },
+        "gitlens.codeLens.enabled": false,
+        "terminal.integrated.showExitAlert": false,
+        "github.copilot.editor.enableAutoCompletions": true
+      },
+      "extensions": [
+        "GitHub.copilot",
+        "usernamehw.errorlens",
+        "miguelsolorio.symbols",
+        "eamodio.gitlens",
+        "GitHub.copilot-chat",
+        "rust-lang.rust-analyzer",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "4ops.terraform",
+        "adpyke.vscode-sql-formatter",
+        "ms-azuretools.vscode-docker",
+        "tamasfe.even-better-toml",
+        "sndst00m.starfall-visual-studio-code"
+      ]
+    }
+  },
+  "forwardPorts": [
+    3000,
+    5432
+  ],
+  "postCreateCommand": "echo 'Welcome!'",
+  "shutdownAction": "stopCompose"
+}
