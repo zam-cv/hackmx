@@ -35,6 +35,7 @@ code hackmx
 - Create a `.env` file inside the backend folder and add the following environment variables:
 
 ```bash
+# backend/.env
 RUST_LOG=debug
 HOST=0.0.0.0
 PORT=8080
