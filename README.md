@@ -11,7 +11,7 @@ HackMx is a platform for hosting hackathons in Mexico.
 - [Git](https://git-scm.com/downloads)
 - [VSCode](https://code.visualstudio.com/download)
 
-## If you are in Windows follow the following steps
+### If you are in Windows follow the following steps
 1. [Install WSL](https://learn.microsoft.com/es-es/windows/wsl/install/)
 2. [Install Docker Compose for Windows](https://www.ionos.com/digitalguide/server/configuration/install-docker-compose-on-windows/)
 
