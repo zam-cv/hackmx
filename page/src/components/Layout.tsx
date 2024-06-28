@@ -1,7 +1,7 @@
 // import { useAuth } from "../hooks/useAuth";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-
+import ThemeSwitch from './ThemeSwitch';
 export default function Layout() {
   // const { isAuthenticated, isLoading } = useAuth();
   const isAuthenticated = true;
@@ -17,6 +17,10 @@ export default function Layout() {
       <div className="overflow-auto bg-background">
         <Outlet />
       </div>
+      <div className="fixed bottom-4 right-4">
+        <ThemeSwitch />
+      </div>
+
     </div>
   );
 }
