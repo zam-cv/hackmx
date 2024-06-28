@@ -14,13 +14,14 @@ export default function Login(){
     //navigate('/dashboard');
   }
 
-  return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="p-8 bg-white rounded-lg shadow-lg max-w-sm w-full">
-        <h2 className="text-2xl font-bold mb-6 text-center font-sulphur">HackMx</h2>
+  return ( 
+    <div className="flex items-center justify-center h-screen font-poppins">
+      <div className="p-8 bg-white rounded-lg max-w-sm w-full">
+        <h2 className="text-5xl font-bold mb-1 text-center font-sulphur text-hack-blue">HackMx</h2>
+        <h3 className="text-sm font-semibold mb-10 text-center text-hack-grey">Login into your account</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 text-left px-0">Email address</label>
             <input
               type="text"
               id="username"
@@ -30,8 +31,8 @@ export default function Login(){
               placeholder="Enter your username"
             />
           </div>
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+          <div className="mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 text-left px-0">Password</label>
             <input
               type="password"
               id="password"
@@ -41,14 +42,15 @@ export default function Login(){
               placeholder="Enter your password"
             />
           </div>
-          <div className="mb-4">
-            <button type="submit" className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:bg-blue-700">
+          <div className="text-xs text-right underline mb-6">
+            <a href="#" className="font-medium text-hack-blue hover:text-blue-900">Forgot password?</a>
+          </div>
+          <div className="mb-4 shadow-2xl">
+            <button type="submit" className="w-full px-4 py-2 text-sm font-medium text-white bg-hack-blue rounded-md hover:bg-blue-900 focus:outline-none focus:bg-blue-900 shadow-2xl">
               Login now
             </button>
           </div>
-          <div className="text-sm text-center">
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">Forgot password?</a>
-          </div>
+          
           <hr className="my-6"/>
           <div className="text-sm text-center">
             <a href="#" className="font-medium text-blue-600 hover:text-blue-500">Signup now</a>
