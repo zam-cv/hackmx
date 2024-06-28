@@ -9,3 +9,13 @@ actix-web = "4.6.0"
 env_logger = "0.11.3"
 log = "0.4.21"
 dotenv = "0.15.0"
+jsonwebtoken = "9.3.0"
+rand = "0.8.5"
+actix-web-lab = "0.20.2"
+serde = { version = "1.0.203", features = ["derive"] }
+anyhow = "1.0.86"
+rust-argon2 = "2.1.0"
+chrono = "0.4.38"
+validator = { version = "0.18.1", features = ["derive"] }
+lazy_static = "1.5.0"
+diesel = { version = "2.2.1", features = ["postgres", "r2d2", "chrono", "uuid", "numeric"] }
