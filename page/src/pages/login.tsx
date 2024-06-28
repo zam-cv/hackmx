@@ -1,7 +1,7 @@
 import {useState} from 'react';
 //import {Navigate, useNavigate} from 'react-router-dom';
 
-export default function Login(){
+export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   //const navigate = useNavigate();
@@ -59,9 +59,4 @@ export default function Login(){
       </div>
     </div>
   );
-
-  
 }
-
-
-
