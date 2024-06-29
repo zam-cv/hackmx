@@ -15,6 +15,18 @@ pub struct Credentials {
     pub password: String,
 }
 
+#[derive(Deserialize, Serialize)]
+pub struct UserInformation {
+    pub username: String,
+    pub email: String,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct Session {
+    pub token: String,
+    pub user_information: UserInformation,
+}
+
 // support for websockets
 fn support_websockets(req: &ServiceRequest) -> Option<String> {
     req.headers()
@@ -70,9 +82,9 @@ pub async fn middleware(
 
 pub trait User {
     fn id(&self) -> Option<i32>;
-    fn email(&self) -> &String;
-    fn password(&self) -> &String;
-    fn set_hashed_password(&mut self, password: String);
+    fn username(&mut self) -> &mut String;
+    fn email(&mut self) -> &mut String;
+    fn password(&mut self) -> &mut String;
 }
 
 pub trait Auth<Model: Validate + User + DeserializeOwned + 'static> {
@@ -98,7 +110,7 @@ pub trait Auth<Model: Validate + User + DeserializeOwned + 'static> {
 
         // Hash the password
         if let Ok(hash) = utils::hash_password(user.password()) {
-            user.set_hashed_password(hash);
+            *user.password() = hash;
 
             // Create the user
             return match self.create_user(user.into_inner()).await {
@@ -110,9 +122,9 @@ pub trait Auth<Model: Validate + User + DeserializeOwned + 'static> {
         }
     }
 
-    async fn signin<T: User>(&self, credentials: web::Json<Credentials>) -> HttpResponse {
+    async fn signin(&self, credentials: web::Json<Credentials>) -> HttpResponse {
         // Get the user by email
-        let user = match self.get_user_by_email(credentials.email.clone()).await {
+        let mut user = match self.get_user_by_email(credentials.email.clone()).await {
             Ok(Some(user)) => user,
             _ => return HttpResponse::BadRequest().body("Invalid credentials"),
         };
@@ -122,19 +134,29 @@ pub trait Auth<Model: Validate + User + DeserializeOwned + 'static> {
             if let Some(id) = user.id() {
                 // Create a token
                 if let Ok(token) = utils::create_token(self.secret_key(), id) {
-                    return HttpResponse::Ok().body(token);
+                    return HttpResponse::Ok().json(Session {
+                        token,
+                        user_information: UserInformation {
+                            username: std::mem::take(user.username()),
+                            email: std::mem::take(user.email()),
+                        },
+                    });
                 }
             }
         };
 
+        log::error!("Invalid credentials");
         HttpResponse::BadRequest().body("Invalid credentials")
     }
 
-    async fn verify<T: User>(&self, req: HttpRequest) -> HttpResponse {
+    async fn verify(&self, req: HttpRequest) -> HttpResponse {
         if let Some(id) = req.extensions().get::<i32>() {
             // Get the user by id
-            if let Ok(Some(_)) = self.get_user_by_id(*id).await {
-                return HttpResponse::Ok().finish();
+            if let Ok(Some(mut user)) = self.get_user_by_id(*id).await {
+                return HttpResponse::Ok().json(UserInformation {
+                    username: std::mem::take(user.username()),
+                    email: std::mem::take(user.email()),
+                });
             }
         }
 
@@ -150,42 +172,39 @@ pub trait Auth<Model: Validate + User + DeserializeOwned + 'static> {
 
         web::scope("")
             .app_data(web::Data::new(self))
-            .route("/register", web::post().to(register::<Self, T, Model>))
-            .route("/signin", web::post().to(signin::<Self, T, Model>))
+            .route("/register", web::post().to(register::<Self, Model>))
+            .route("/signin", web::post().to(signin::<Self, Model>))
             .service(
                 web::scope("")
                     .wrap(from_fn(move |req, srv| middleware(req, srv, &secret_key)))
-                    .route("/verify", web::get().to(verify::<Self, T, Model>)),
+                    .route("/verify", web::get().to(verify::<Self, Model>)),
             )
     }
 }
 
-pub async fn register<A, T, Model>(auth: web::Data<A>, user: web::Json<Model>) -> HttpResponse
+pub async fn register<A, Model>(auth: web::Data<A>, user: web::Json<Model>) -> HttpResponse
 where
     Model: Validate + User + DeserializeOwned + 'static,
-    A: Auth<Model>,
-    T: Validate + User + DeserializeOwned,
+    A: Auth<Model>
 {
     auth.register(user).await
 }
 
-pub async fn signin<A, T, Model>(
+pub async fn signin<A, Model>(
     auth: web::Data<A>,
     credentials: web::Json<Credentials>,
 ) -> HttpResponse
 where
     Model: Validate + User + DeserializeOwned + 'static,
     A: Auth<Model>,
-    T: Validate + User + DeserializeOwned,
 {
-    auth.signin::<T>(credentials).await
+    auth.signin(credentials).await
 }
 
-pub async fn verify<A, T, Model>(auth: web::Data<A>, req: HttpRequest) -> HttpResponse
+pub async fn verify<A, Model>(auth: web::Data<A>, req: HttpRequest) -> HttpResponse
 where
     Model: Validate + User + DeserializeOwned + 'static,
     A: Auth<Model>,
-    T: Validate + User + DeserializeOwned,
 {
-    auth.verify::<T>(req).await
+    auth.verify(req).await
 }

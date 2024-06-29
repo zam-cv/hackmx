@@ -1,25 +1,63 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SettingsProvider from './providers/SettingsProvider'
-import Layout from './components/Layout.tsx'
-import './App.css'
+import Layout from "./components/Layout";
+import "./App.css";
+
+// security
+import Protected from "./components/Protected";
+import Unprotected from "./components/Unprotected";
+
+// providers
+import SettingsProvider from "./providers/SettingsProvider";
+import AuthProvider from "./providers/AuthProvider";
 
 // pages
-import Home from './pages/Home.tsx'
-import Login from './pages/Login.tsx'
+import LandingPage from "./pages/LandingPage";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 function App() {
   return (
     <SettingsProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-          </Route>
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Landing Page */}
+            <Route
+              index
+              path="/"
+              element={
+                <Unprotected>
+                  <LandingPage />
+                </Unprotected>
+              }
+            />
+
+            {/* Internal */}
+            <Route path="/" element={<Layout />}>
+              <Route
+                path="/home"
+                element={
+                  <Protected>
+                    <Home />
+                  </Protected>
+                }
+              />
+            </Route>
+
+            {/* Login */}
+            <Route
+              path="/login"
+              element={
+                <Unprotected>
+                  <Login />
+                </Unprotected>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </SettingsProvider>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,4 +1,5 @@
 use crate::{controllers, database::Database};
+use actix_cors::Cors;
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use std::env;
 
@@ -16,10 +17,12 @@ pub async fn app() -> std::io::Result<()> {
     log::info!("Listening on http://{}:{}", host, port);
 
     HttpServer::new(move || {
-        App::new().wrap(Logger::default()).service(
-            web::scope("/api")
-                .service(controllers::auth::routes(database.clone()))
-        )
+        App::new()
+            // Enable logger and CORS middleware
+            .wrap(Cors::permissive())
+            .wrap(Logger::default())
+            // Mount the API routes
+            .service(web::scope("/api").service(controllers::auth::routes(database.clone())))
     })
     .bind(format!("{}:{}", host, port))?
     .run()

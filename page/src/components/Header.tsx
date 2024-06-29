@@ -1,6 +1,9 @@
+import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 
 export default function Header() {
+  const { signout } = useAuth();
+
   return (
     <div className="grid grid-cols-[auto_1fr_auto] p-5 pt-6 shadow-md">
       <h2 className="font-bold text-lg">HackMx</h2>
@@ -10,7 +13,7 @@ export default function Header() {
         </Link>
       </div>
       <div>
-        <button>
+        <button onClick={signout}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

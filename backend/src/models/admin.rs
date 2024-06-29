@@ -25,15 +25,15 @@ impl auth::User for Admin {
         self.id
     }
 
-    fn email(&self) -> &String {
-        &self.email
+    fn username(&mut self) -> &mut String {
+        &mut self.username
     }
 
-    fn password(&self) -> &String {
-        &self.password
+    fn email(&mut self) -> &mut String {
+        &mut self.email
     }
 
-    fn set_hashed_password(&mut self, password: String) {
-        self.password = password;
+    fn password(&mut self) -> &mut String {
+        &mut self.password
     }
 }

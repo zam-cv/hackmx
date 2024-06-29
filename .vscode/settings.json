@@ -2,5 +2,17 @@
   "rust-analyzer.linkedProjects": [
     "./backend/Cargo.toml"
   ],
-  "rust-analyzer.showUnlinkedFileNotification": false
+  "rust-analyzer.showUnlinkedFileNotification": false,
+  "eslint.workingDirectories": [
+    "./page"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "javascript.node_path": "./node_modules",
+  "search.exclude": {
+    "**/node_modules": false
+  },
+  "files.watcherExclude": {
+    "**/node_modules": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative"
 }
