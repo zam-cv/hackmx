@@ -64,6 +64,16 @@ VITE_APP_SERVER_PORT=8080
 VITE_APP_API_ROUTE="api"
 ```
 
+- Create a `.env` file inside the platform folder and add the following environment variables:
+
+```bash
+# platform/.env
+VITE_APP_SERVER_PROTOCOL = "http"
+VITE_APP_SERVER_HOST = "0.0.0.0"
+VITE_APP_SERVER_PORT = 8080
+VITE_APP_API_ROUTE = "api"
+```
+
 5. Open the project in a container
 
 - Press `F1` and select `Dev Containers: Reopen in Container`
