@@ -1,5 +1,6 @@
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
+import ThemeSwitch from './ThemeSwitch';
 
 export default function Header() {
   const { signout } = useAuth();
@@ -12,7 +13,10 @@ export default function Header() {
           Home
         </Link>
       </div>
-      <div>
+      <div className="flex gap-5">
+        <div className="bottom-4 right-4">
+          <ThemeSwitch />
+        </div>
         <button onClick={signout}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -31,5 +35,5 @@ export default function Header() {
         </button>
       </div>
     </div>
-  )
+  );
 }
