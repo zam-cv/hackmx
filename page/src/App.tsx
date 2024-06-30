@@ -13,7 +13,7 @@ import AuthProvider from "./providers/AuthProvider";
 // pages
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+import Login from "./pages/login";
 
 function App() {
   return (

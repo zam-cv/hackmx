@@ -12,7 +12,8 @@ export default {
       },
       colors: {
         'hack-blue': '#1E2772',
-        'hack-grey': '#555555' // Añade un azul personalizado
+        'hack-grey': '#555555',
+        'hack-color-input': '#F1F3F6'
       }
     }
   },
