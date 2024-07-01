@@ -1,0 +1,11 @@
+/* Themes styles */
+
+.light-theme {
+  --background : #DCE1EA;
+  --text : #000000;
+}
+
+.dark-theme{
+  --background : #333333;
+  --text : #FFFFFF;
+}
