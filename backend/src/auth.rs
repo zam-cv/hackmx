@@ -92,9 +92,9 @@ pub trait Auth<Model: Validate + User + DeserializeOwned + 'static> {
     fn secret_key(&self) -> &'static String;
 
     // database
-    async fn get_user_by_email(&self, email: String) -> anyhow::Result<Option<impl User>>;
+    async fn get_user_by_email(&self, email: String) -> anyhow::Result<Option<Model>>;
     async fn create_user(&self, new_user: Model) -> anyhow::Result<i32>;
-    async fn get_user_by_id(&self, id: i32) -> anyhow::Result<Option<impl User>>;
+    async fn get_user_by_id(&self, id: i32) -> anyhow::Result<Option<Model>>;
 
     // routes
     async fn register(&self, mut user: web::Json<Model>) -> HttpResponse {
