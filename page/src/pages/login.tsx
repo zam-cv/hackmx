@@ -37,7 +37,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, passwordRef)}
-                className="bg-hack-color-input block w-full px-3 py-2 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="bg-hack-color-input block w-full px-3 py-2 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500"
                 placeholder="Enter your email"
               />
               <div className="absolute inset-y-0 right-0 flex items-center">
@@ -58,7 +58,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => handleEnter(e, handleLogin)}
-                className="bg-hack-color-input block w-full px-3 py-2 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="bg-hack-color-input block w-full px-3 py-2 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500"
                 placeholder="Enter your password"
               />
               <div className="absolute inset-y-0 right-0 flex items-center">
