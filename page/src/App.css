@@ -1,11 +1,11 @@
 /* Themes styles */
 
-.light-theme {
+.light {
   --background : #DCE1EA;
   --text : #000000;
 }
 
-.dark-theme{
+.dark{
   --background : #333333;
   --text : #FFFFFF;
 }
