@@ -9,9 +9,12 @@ export default function LandingPage() {
   return (
     <div className={theme}>
       <h1>Landing Page</h1>
+      
       <Timer targetDate="2024-10-15T00:00:00" />
 
       <ThemeSwitch />
+
+      <footer>Tecnologico de Monterrey 2024</footer>
     </div>
   );
 }
