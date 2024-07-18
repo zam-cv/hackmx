@@ -6,7 +6,6 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [teamName, setTeamName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
 
@@ -80,17 +79,6 @@ export default function Register() {
               placeholder="Enter your password again"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="team-name" className="block text-gray-700">Team Name</label>
-            <input
-              type="text"
-              id="team-name"
-              className="mt-2 p-2 w-full border rounded-md bg-gray-200 placeholder-black"
-              placeholder="Enter the name of your team"
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
             />
           </div>
           <div className="mb-4">
