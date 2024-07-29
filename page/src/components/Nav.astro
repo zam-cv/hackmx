@@ -1,0 +1,23 @@
+---
+import Link from "./Link.astro";
+
+interface NavProps {
+  id: string;
+}
+
+const { id } = Astro.props as NavProps;
+---
+
+<nav slot="nav" class="flex gap-5 max-lg:flex-col">
+  <Link href={`/event?id=${id}`}>Publicaciones</Link>
+  <Link href={`/event/documents?id=${id}`}>Documentos</Link>
+  <Link href={`/event/scheduling?id=${id}`}>Programación</Link>
+  <Link href={`/event/project?id=${id}`}>Proyecto</Link>
+  <Link href={`/event/messages?id=${id}`}>Soporte</Link>
+  <div class="hidden max-lg:flex flex-col gap-5">
+    <Link href={`/dashboard`}>Dashboard</Link>
+    <Link href={`/profile`}>Mi Perfil</Link>
+    <Link href={`/projects`}>Mis Proyectos</Link>
+    <Link href={`/logout`}>Cerrar Sesión</Link>
+  </div>
+</nav>

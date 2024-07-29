@@ -1,0 +1,16 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Avatar from "@/components/Avatar";
+import EventDetails from "@/components/EventDetails";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Invitación" loading>
+  <Header slot="header" withMenu={false} mainRoute="/dashboard">
+    <Avatar slot="avatar" visible client:only />
+  </Header>
+  <div slot="content" class="md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] flex flex-col gap-20 lg:py-28 lg:px-36 px-16 py-14 max-sm:px-5">
+    <EventDetails client:only />
+  </div>
+</Layout>

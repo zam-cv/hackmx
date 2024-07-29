@@ -1,0 +1,244 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import MainNav from "@/components/MainNav.astro";
+import Label from "@/components/Label.astro";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import Semester from "@/components/Semester";
+import Campus from "@/components/Campus";
+import Majors from "@/components/Majors";
+import { Checkbox } from "@/components/ui/checkbox";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Registro">
+	<Header slot="header" withMenu mainRoute="/">
+		<MainNav slot="nav" />
+	</Header>
+	<div slot="content">
+		<div
+			class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] flex justify-center items-center"
+		>
+			<div class="w-full h-full flex items-center justify-center">
+				<div class="flex flex-col gap-5 max-md:container w-[800px] p-7">
+					<div
+						class="flex flex-col gap-10 bg-p-secondary-background p-10 rounded-md"
+					>
+						<h2 class="text-xl font-bold">Registrarse en HackMx</h2>
+						<div class="flex flex-col gap-7">
+							<div class="grid gap-5 w-full sm:grid-cols-4">
+								<div class="flex flex-col gap-2">
+									<div>
+										<Label htmlFor="username">Nombre de Usuario</Label>
+										<span class="text-red-500">*</span>
+									</div>
+									<Input id="username" type="text" />
+								</div>
+								<div class="flex flex-col gap-2">
+									<div>
+										<Label htmlFor="firstname">Nombre</Label>
+										<span class="text-red-500">*</span>
+									</div>
+									<Input id="firstname" type="text" />
+								</div>
+								<div class="flex flex-col gap-2">
+									<div>
+										<Label htmlFor="lastname">Apellido Paterno</Label>
+										<span class="text-red-500">*</span>
+									</div>
+									<Input id="lastname" type="text" />
+								</div>
+								<div class="flex flex-col gap-2">
+									<div>
+										<Label htmlFor="motherlastname">Apellido Materno</Label>
+										<span class="text-red-500">*</span>
+									</div>
+									<Input id="motherlastname" type="text" />
+								</div>
+							</div>
+							<div class="grid gap-5 w-full sm:grid-cols-6">
+								<div class="flex flex-col gap-2 col-span-2">
+									<div>
+										<Label htmlFor="email">Correo Personal</Label>
+										<span class="text-red-500">*</span>
+									</div>
+									<Input id="email" type="email" placeholder="m@example.com" />
+								</div>
+								<div class="flex flex-col gap-2 col-span-2">
+									<div>
+										<Label htmlFor="phone">Número Telefónico</Label>
+										<span class="text-red-500">*</span>
+									</div>
+									<Input
+										id="phone"
+										type="text"
+										placeholder="+52 55 1234 5678"
+									/>
+								</div>
+								<div class="flex flex-col gap-2">
+									<div>
+										<Label htmlFor="semester">Semestre</Label>
+										<span class="text-red-500">*</span>
+									</div>
+									<Semester client:load />
+								</div>
+								<div class="flex flex-col gap-2">
+									<div>
+										<Label htmlFor="campus">Campus</Label>
+										<span></span>
+									</div>
+									<Campus client:only />
+								</div>
+							</div>
+							<div class="grid gap-5 w-full sm:grid-cols-8 max-sm:grid-cols-5 -mb-4">
+								<div class="flex flex-col gap-2 col-span-2">
+									<div>
+										<Label htmlFor="major">Carrera</Label>
+										<span></span>
+									</div>
+									<Majors client:only />
+								</div>
+								<div class="flex flex-col gap-2 col-span-3">
+									<div>
+										<Label htmlFor="institutionalEmail"
+											>Correo Institucional</Label
+										>
+										<span class="text-red-500">*</span>
+									</div>
+									<Input
+										id="institutionalEmail"
+										type="email"
+										placeholder="a01234567@tec.mx"
+									/>
+								</div>
+								<div class="flex flex-col gap-1 col-span-3">
+									<div class="flex flex-col gap-2">
+										<div>
+											<Label htmlFor="password">Password</Label>
+											<span class="text-red-500">*</span>
+										</div>
+										<Input
+											id="password"
+											type="password"
+											placeholder="•••••••••••"
+										/>
+									</div>
+									<p class="text-xs text-p-secondary-text text-right">
+										minimo ocho caracteres
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="flex flex-col gap-4">
+							<div class="flex items-center space-x-2">
+								<Checkbox id="terms" client:load />
+								<label
+									for="terms"
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+								>
+									He leido y acepto los términos del <a
+										href="https://tec.mx/es/aviso-privacidad-participantes-expositores-panelistas-conferencistas-moderadores"
+										target="_blank"
+										class="text-p-purple-light">Aviso de Privacidad</a
+									>
+								</label>
+							</div>
+							<Button id="register">Registrarse</Button>
+						</div>
+					</div>
+					<div class="flex gap-2">
+						<div class="text-p-secondary-text">¿Ya tienes cuenta?</div>
+						<a href="/login" class="text-p-purple-light">Inicia sesión</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</Layout>
+<script>
+	import api, { type User } from "@/utils/api";
+	import { next } from "@/utils";
+
+	async function handleRegister() {
+		const register = document.getElementById("register") as HTMLButtonElement;
+
+		const elUsername = document.getElementById("username") as HTMLInputElement;
+		const elFirstname = document.getElementById(
+			"firstname",
+		) as HTMLInputElement;
+		const elLastname = document.getElementById("lastname") as HTMLInputElement;
+		const elMotherlastname = document.getElementById(
+			"motherlastname",
+		) as HTMLInputElement;
+		const elPersonalEmail = document.getElementById(
+			"email",
+		) as HTMLInputElement;
+		const elPhone = document.getElementById("phone") as HTMLInputElement;
+		const elSemester = document.getElementById("semester") as HTMLInputElement;
+		const elCampus = document.getElementById("campus") as HTMLInputElement;
+		const elMajor = document.getElementById("major") as HTMLInputElement;
+		const elInstitutionalEmail = document.getElementById(
+			"institutionalEmail",
+		) as HTMLInputElement;
+		const elPassword = document.getElementById("password") as HTMLInputElement;
+
+		const elTerms = document.getElementById("terms") as HTMLInputElement;
+
+		if (
+			elUsername?.value === "" ||
+			elFirstname?.value === "" ||
+			elLastname?.value === "" ||
+			elMotherlastname?.value === "" ||
+			elPersonalEmail?.value === "" ||
+			elPhone?.value === "" ||
+			elSemester?.value === "" ||
+			elInstitutionalEmail?.value === "" ||
+			elPassword?.value === "" ||
+			elTerms?.ariaChecked === "false"
+		) {
+			return;
+		}
+
+		register.setAttribute("disabled", "true");
+		register.textContent = "Registrando...";
+
+		const user: User = {
+			username: elUsername.value,
+			firstname: elFirstname.value,
+			lastname: elLastname.value + " " + elMotherlastname.value,
+			personal_email: elPersonalEmail.value,
+			phone: elPhone.value,
+			semester: parseInt(elSemester.value),
+			email: elInstitutionalEmail.value,
+			password: elPassword.value,
+		};
+
+		if (elCampus?.value !== "__none") {
+			user.campus = elCampus?.value;
+		}
+
+		if (elMajor?.value !== "__none") {
+			user.major = elMajor?.value;
+		}
+
+		try {
+			await api.auth.register(user);
+			window.location.href = "/login";
+		} catch (error) {
+			register.removeAttribute("disabled");
+			register.textContent = "Registrarse";
+			console.error(error);
+		}
+	}
+
+	const register = document.getElementById("register");
+	register?.addEventListener("click", handleRegister);
+
+	next("username", "firstname");
+	next("firstname", "lastname");
+	next("lastname", "motherlastname");
+	next("motherlastname", "email");
+	next("email", "phone");
+	next("institutionalEmail", "password");
+</script>

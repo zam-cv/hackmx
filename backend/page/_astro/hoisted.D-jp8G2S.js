@@ -1,0 +1,1 @@
+import{a as n}from"./api.DSv2L0Mn.js";import{g as s}from"./index.DS6nHFjH.js";import"./hoisted.CnQErQxt.js";function a(){const e=document.getElementById("message");if(!e)return;const t=s("id");n.events.sendMessage(parseInt(t??""),e.value),e.value=""}document.getElementById("send")?.addEventListener("click",a);

@@ -1,0 +1,20 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Avatar from "@/components/Avatar";
+import Events from "@/components/Events";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Dashboard" loading>
+  <Header slot="header" withMenu={false} mainRoute="/dashboard">
+    <Avatar slot="avatar" visible client:only />
+  </Header>
+  <div slot="content">
+    <div
+      class="w-full md:h-[calc(100vh-8rem)] h-[calc(100vh-7rem)] flex flex-wrap p-10"
+    >
+      <Events client:only />
+    </div>
+  </div>
+</Layout>

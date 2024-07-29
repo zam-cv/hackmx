@@ -1,4 +1,4 @@
-use crate::{auth, schema};
+use crate::{utils::auth, schema};
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 use diesel::prelude::*;

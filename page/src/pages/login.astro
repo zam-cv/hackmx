@@ -1,0 +1,90 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import MainNav from "@/components/MainNav.astro";
+import Label from "@/components/Label.astro";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Iniciar Sesión">
+  <Header slot="header" withMenu mainRoute="/">
+    <MainNav slot="nav" />
+  </Header>
+  <div slot="content">
+    <div
+      class="w-full md:h-[calc(100vh-8rem)] h-[calc(100vh-7rem)] flex justify-center items-center"
+    >
+      <div class="w-full h-full flex items-center justify-center">
+        <div class="flex flex-col gap-5 max-md:container w-[600px] p-7">
+          <div
+            class="flex flex-col gap-10 bg-p-secondary-background p-10 rounded-md"
+          >
+            <h2 class="text-xl font-bold">Iniciar Sesión en HackMx</h2>
+            <div class="flex flex-col gap-7">
+              <div class="flex flex-col gap-2">
+                <Label>Correo electrónico</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="a01234567@tec.mx"
+                  required
+                />
+              </div>
+              <div class="flex flex-col gap-2">
+                <Label>Contraseña</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="•••••••••••"
+                  required
+                />
+                <div>
+                  <a href="/forgot-password" class="text-p-purple-light text-sm"
+                    >¿Olvidaste tu contraseña?</a
+                  >
+                </div>
+              </div>
+            </div>
+            <Button id="login">Iniciar sesión</Button>
+          </div>
+          <div class="flex gap-2">
+            <div class="text-p-secondary-text">¿No tienes cuenta?</div>
+            <a href="/register" class="text-p-purple-light">Regístrate</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+<script>
+  import api from "@/utils/api";
+  import { next, nextWithAction } from "@/utils";
+
+  async function handleLogin() {
+    const elEmail = document.getElementById("email") as HTMLInputElement | null;
+    const elPassword = document.getElementById(
+      "password",
+    ) as HTMLInputElement | null;
+    const email = elEmail?.value;
+    const password = elPassword?.value;
+
+    if (!email || !password) {
+      console.error("Faltan campos por llenar");
+      return;
+    }
+
+    try {
+      await api.auth.signin(email, password);
+      window.location.href = "/dashboard";
+    } catch (error) {
+      console.error("Error en la petición", error);
+    }
+  }
+
+  next("email", "password");
+  nextWithAction("password", handleLogin);
+
+  document.getElementById("login")?.addEventListener("click", handleLogin);
+</script>

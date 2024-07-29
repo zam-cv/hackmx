@@ -12,3 +12,4 @@ SERVER_HOST =
 
 export const API_ROUTE = import.meta.env.VITE_APP_API_ROUTE || "api";
 export const API_URL = `${SERVER_PROTOCOL}://${SERVER_HOST}/${API_ROUTE}`;
+export const SERVER = `${SERVER_PROTOCOL}://${SERVER_HOST}`;

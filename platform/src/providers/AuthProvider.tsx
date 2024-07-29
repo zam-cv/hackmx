@@ -30,7 +30,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   function signout() {
     localStorage.removeItem("token");
-    setIsAuthenticated(false);
+    api.auth.logout().then(() => {
+      setIsAuthenticated(false);
+    })
   }
 
   function signin(email: string, password: string, navigate: NavigateFunction) {
@@ -43,7 +45,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         localStorage.setItem("token", data.token);
         setIsAuthenticated(true);
         setIsLoading(false);
-        navigate("/home");
+        navigate("/events");
       })
       .catch((error) => {
         setIsLoading(false);
@@ -52,7 +54,17 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       });
   }
 
-  return <AuthContext.Provider value={{ isLoading, isAuthenticated, signout, signin, userInformation }}>
-    {children}
-  </AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={
+      {
+        isLoading,
+        isAuthenticated,
+        signout,
+        signin,
+        userInformation,
+      }
+    }>
+      {children}
+    </AuthContext.Provider>
+  );
 }

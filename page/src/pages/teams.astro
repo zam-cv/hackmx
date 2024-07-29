@@ -1,0 +1,20 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Avatar from "@/components/Avatar";
+import Team from "@/components/Teams";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Equipos">
+  <Header slot="header" withMenu={false} mainRoute="/dashboard">
+    <Avatar slot="avatar" visible client:only />
+  </Header>
+  <div slot="content">
+    <div
+      class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] grid grid-rows-[auto_1fr] p-10 gap-10 max-[520px]:px-5 max-[350px]:gap-5"
+    >
+      <Team client:only />
+    </div>
+  </div>
+</Layout>

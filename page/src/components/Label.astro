@@ -1,0 +1,10 @@
+---
+interface Props {
+  [key: string]: unknown;
+}
+
+const { ...props } = Astro.props;
+---
+<label {...props} class="text-p-secondary-text text-sm">
+  <slot />
+</label>

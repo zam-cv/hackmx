@@ -46,6 +46,9 @@ HOST=0.0.0.0
 PORT=8080
 DATABASE_URL=postgres://admin:awdrqwer12@database-server:5432/hackmx
 
+ADMIN_DEFAULT_EMAIL=admin@hackmx.com
+ADMIN_DEFAULT_PASSWORD=awdrqwer12
+
 USER_SECRET_KEY=secret
 ADMIN_SECRET_KEY=secret2
 

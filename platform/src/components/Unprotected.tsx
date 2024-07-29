@@ -11,7 +11,7 @@ export default function Unprotected({
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/home");
+    if (isAuthenticated) navigate("/events");
   }, [isAuthenticated, navigate]);
 
   return <>{children}</>;

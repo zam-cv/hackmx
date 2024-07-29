@@ -1,0 +1,20 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Avatar from "@/components/Avatar";
+import EditProfile from "@/components/EditProfile";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Perfil">
+  <Header slot="header" withMenu={false} mainRoute="/dashboard">
+    <Avatar slot="avatar" visible client:only />
+  </Header>
+  <div slot="content">
+    <div
+      class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] flex justify-center items-center"
+    >
+      <EditProfile client:only />
+    </div>
+  </div>
+</Layout>

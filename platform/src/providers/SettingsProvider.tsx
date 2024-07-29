@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SettingsContext } from "../contexts/SettingsContext";
+import { platform } from "@tauri-apps/plugin-os";
 
 export default function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [platform, setPlatform] = useState("...");
+  const [platformName, setPlatform] = useState("browser");
 
-  return <SettingsContext.Provider value={{ platform, setPlatform }}>
+  useEffect(() => {
+    (async () => {
+      try {
+        const platformName = await platform();
+        setPlatform(platformName);
+      }
+      catch (_) { }
+    })();
+  }, [platform]);
+
+  return <SettingsContext.Provider value={{ platform: platformName, setPlatform }}>
     {children}
   </SettingsContext.Provider>
 }

@@ -1,7 +1,7 @@
 {
   "productName": "platform",
   "version": "0.0.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.hackmx.dev",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,8 +12,12 @@
     "windows": [
       {
         "title": "platform",
-        "width": 800,
-        "height": 600
+        "width": 1400,
+        "height": 900,
+        "minWidth": 1000,
+        "minHeight": 800,
+        "hiddenTitle": true,
+        "titleBarStyle": "Overlay"
       }
     ],
     "security": {

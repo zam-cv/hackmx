@@ -1,0 +1,19 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Avatar from "@/components/Avatar";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Proyectos">
+  <Header slot="header" withMenu={false} mainRoute="/dashboard">
+    <Avatar slot="avatar" visible client:only />
+  </Header>
+  <div slot="content">
+    <div
+      class="w-full md:h-[calc(100vh-8rem)] h-[calc(100vh-7rem)] p-10"
+    >
+      <h1 class="text-4xl text-center font-bold">Proyectos</h1>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,30 @@
+---
+
+---
+
+<div class="h-full w-full -mb-10 bg-p-secondary-background">
+  <div id="background" class="h-full w-full"></div>
+</div>
+<script is:inline defer src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"
+></script>
+<script
+  is:inline
+  defer
+  src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.trunk.min.js"
+></script>
+<script type="module" is:inline>
+  VANTA.TRUNK({
+    el: "#background",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    scale: 1.0,
+    scaleMobile: 1.0,
+    color: 0xf22963,
+    backgroundColor: 0x181a44,
+    spacing: 0.5,
+    chaos: 7.0,
+  });
+</script>

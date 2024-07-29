@@ -4,16 +4,33 @@ import { useAuth } from "../hooks/useAuth";
 import Loading from "./Loading";
 
 export default function Layout() {
-  const { isLoading } = useAuth();
+  const { isLoading, isAuthenticated } = useAuth();
 
-  if (isLoading) return <Loading />;
+  if (isLoading) {
+    return (
+      <>
+        <div></div>
+        <div className="overflow-hidden">
+          <div className="overflow-auto h-full">
+            <div className="flex items-center justify-center h-full">
+              <Loading />
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  };
 
   return (
-    <div className="h-full grid grid-rows-[auto_1fr] overflow-hidden">
-      <div><Header /></div>
-      <div className="overflow-auto bg-background">
-        <Outlet />
+    <>
+      <div>
+        {isAuthenticated ? <Header /> : null}
       </div>
-    </div>
+      <div className="overflow-hidden">
+        <div className="overflow-auto h-full">
+          <Outlet />
+        </div>
+      </div>
+    </>
   );
 }

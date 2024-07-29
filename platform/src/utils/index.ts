@@ -17,3 +17,17 @@ export const handleEnter = (
     callback();
   }
 };
+
+export function formatDateWithMicroseconds(date: string) {
+  let d = new Date(date);
+  let localDate = d.getFullYear() + '-' +
+    ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+    ('0' + d.getDate()).slice(-2) + 'T' +
+    ('0' + d.getHours()).slice(-2) + ':' +
+    ('0' + d.getMinutes()).slice(-2) + ':' +
+    ('0' + d.getSeconds()).slice(-2);
+
+  localDate += '.921943';
+
+  return localDate;
+}

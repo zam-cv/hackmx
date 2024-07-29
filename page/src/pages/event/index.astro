@@ -1,0 +1,71 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Avatar from "@/components/Avatar";
+import Publications from "@/components/Publications";
+import Documents from "@/components/Documents";
+import Button from "@/components/Button";
+import { Textarea } from "@/components/ui/textarea";
+import { WrapperTasks } from "@/components/Tasks";
+import UploadProject from "@/components/UploadProject";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Event">
+  <Header slot="header" withMenu={false} mainRoute="/dashboard">
+    <Avatar slot="avatar" visible client:only />
+  </Header>
+  <div slot="content">
+    <div
+      class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] p-16 flex flex-col gap-10"
+    >
+      <Publications client:only />
+      <Documents client:only />
+      <div class="grid lg:grid-cols-2 gap-16">
+        <div>
+          <WrapperTasks client:only />
+        </div>
+        <div class="px-36 max-md:px-16">
+          <UploadProject client:only />
+        </div>
+      </div>
+    </div>
+    <div class="bg-p-secondary-background pt-10">
+      <h1 class="text-3xl font-bold text-center">Soporte</h1>
+      <div
+        class="p-10 gap-10 flex flex-col w-1/2 items-center m-auto max-md:w-full"
+      >
+        <div class="w-full">
+          <Textarea
+            id="message"
+            className="text-base w-full"
+            placeholder="Escribe tu mensaje"
+          />
+        </div>
+        <div class="flex justify-center">
+          <div class="w-48">
+            <Button id="send">Enviar Mensaje</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+<script>
+  import api from "@/utils/api";
+  import { getQueryParam } from "@/utils";
+
+  function send() {
+    const message = document.getElementById(
+      "message",
+    ) as HTMLInputElement | null;
+    if (!message) return;
+
+    const eventId = getQueryParam("id");
+    api.events.sendMessage(parseInt(eventId ?? ""), message.value);
+
+    message.value = "";
+  }
+
+  document.getElementById("send")?.addEventListener("click", send);
+</script>

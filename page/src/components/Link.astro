@@ -1,0 +1,17 @@
+---
+interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<a href={href} class="relative h-full flex items-center py-3 group/nav">
+  <div class="font-bold text-p-secondary-text">
+    <slot />
+  </div>
+  <div
+    class="hidden group-hover/nav:block absolute bottom-0 left-0 h-0.5 bg-white w-full"
+  >
+  </div>
+</a>
