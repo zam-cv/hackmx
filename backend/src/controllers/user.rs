@@ -37,6 +37,10 @@ async fn update_user(
         let user = database.get_user_by_id(*id).await;
         match user {
             Ok(Some(user)) => {
+                if !with_password {
+                    new_user.password = user.password;
+                }
+
                 new_user.id = user.id;
                 new_user.email = user.email;
                 log::info!("Updating user: {:?}", new_user);
