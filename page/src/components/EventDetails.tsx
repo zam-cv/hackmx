@@ -4,17 +4,16 @@ import Button from "@/components/Button";
 import { getQueryParam } from "@/utils";
 import api, { type RegistrationDetails } from "@/utils/api";
 import { format } from "date-fns";
-import { SERVER } from "@/utils/constants";
 import { Checkbox } from "@/components/ui/checkbox";
 import Tasks from "@/components/Tasks";
 import { ButtonDisabled } from "@/components/Button";
 import FQA from "./FQA";
+import SponsorsInEvent from "./SponsorsInEvent";
 
 export default function EventDetails() {
   const [registrationDetails, setRegistrationDetails] = useState<RegistrationDetails | null>(null);
   const [participants, setParticipants] = useState<number>(0);
   const [quota, setQuota] = useState<number>(0);
-  const [sponsors, setSponsors] = useState<[number, string, string][]>([]);
   const [id, setId] = useState<number | null>(null);
   const [event, setEvent] = useState({
     id: 0,
@@ -44,10 +43,6 @@ export default function EventDetails() {
 
         setEvent(data);
         document.getElementById("loading")?.classList.add("hidden");
-
-        api.events.getSponsors(id).then((data) => {
-          setSponsors(data);
-        });
 
         api.events.getParticipantsCount(id).then(setParticipants);
 
@@ -153,18 +148,7 @@ export default function EventDetails() {
           </div>
         </div>
       </div>
-      {
-        sponsors.length > 0 && (
-          <div>
-            <h1 className="text-3xl font-semibold text-center">Patrocinadores</h1>
-            <div className="flex flex-wrap gap-10 pt-10 justify-center">
-              {sponsors.map(([_, name, image], index) => (
-                <img key={index} src={`${SERVER}/${image}`} alt={name} className="w-40 h-36 object-scale-down rounded-md" />
-              ))}
-            </div>
-          </div>
-        )
-      }
+      <SponsorsInEvent />
       <div className="grid lg:grid-cols-2 gap-16">
         <div>
           <FQA eventId={id} />

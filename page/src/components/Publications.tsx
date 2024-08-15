@@ -13,10 +13,10 @@ function Publication({
   content: string
 }) {
   return (
-    <div className="flex flex-col gap-2 px-24 max-md:px-10">
-      <div className="flex gap-5">
+    <div className="flex flex-col gap-2 px-24 max-md:px-10 max-[600px]:px-0">
+      <div className="flex gap-5 max-[550px]:flex-col max-[550px]:gap-2">
         <h1 className="text-xl font-bold">{title}</h1>
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-3 max-[550px]:justify-start max-[550px]:pb-5">
           {format(new Date(date), "dd - MM - yyyy")} 
           <span className="text-p-secondary-text text-sm">{format(new Date(date), "HH:mm")}</span>
         </div>
@@ -48,7 +48,7 @@ export default function Publications() {
   return (
     <div>
       <h1 className="text-3xl font-bold text-center">Publicaciones</h1>
-      <div className="flex flex-col gap-7 p-5 pt-10">
+      <div className="flex flex-col gap-7 p-5 pt-10 max-[600px]:px-0">
         {posts.map((post, i) => (
           <Publication
             key={i}
