@@ -9,6 +9,7 @@ import Semester from "@/components/Semester";
 import Campus from "@/components/Campus";
 import Majors from "@/components/Majors";
 import { Checkbox } from "@/components/ui/checkbox";
+import Particles from "@/components/Particles";
 import "@/styles/globals.css";
 ---
 
@@ -18,8 +19,9 @@ import "@/styles/globals.css";
 	</Header>
 	<div slot="content">
 		<div
-			class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] flex justify-center items-center"
+			class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] flex justify-center items-center relative"
 		>
+			<Particles client:only />
 			<div class="w-full h-full flex items-center justify-center">
 				<div class="flex flex-col gap-5 max-md:container w-[800px] p-7">
 					<div
@@ -91,7 +93,9 @@ import "@/styles/globals.css";
 									<Campus client:only />
 								</div>
 							</div>
-							<div class="grid gap-5 w-full sm:grid-cols-8 max-sm:grid-cols-5 -mb-4">
+							<div
+								class="grid gap-5 w-full sm:grid-cols-8 max-sm:grid-cols-5 -mb-4"
+							>
 								<div class="flex flex-col gap-2 col-span-2">
 									<div>
 										<Label htmlFor="major">Carrera</Label>

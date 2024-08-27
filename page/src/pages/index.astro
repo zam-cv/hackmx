@@ -6,10 +6,11 @@ import MainNav from "@/components/MainNav.astro";
 import Background from "@/components/Background.astro";
 import Sponsors from "@/components/Sponsors";
 import Card from "@/components/Card";
+import Bug from "@/components/models/Bug";
 import "@/styles/globals.css";
 ---
 
-<Layout title="HackMx - Principal">
+<Layout title="hackmx - Principal">
 	<Header slot="header" withMenu mainRoute="/dashboard">
 		<MainNav slot="nav" />
 		<Fragment slot="action">
@@ -21,10 +22,22 @@ import "@/styles/globals.css";
 			class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] flex justify-center items-center relative"
 		>
 			<div class="flex flex-col gap-3 p-16 relative z-20">
-				<h1 class="md:text-9xl text-7xl font-bold text-center">HACKMX</h1>
+				<h1 class="md:text-9xl text-7xl font-bold text-center">HACKMX VI</h1>
 				<p class="text-center md:text-4xl text-2xl">
 					Hackathon de Innovación y Tecnología
 				</p>
+				<div>
+					<p class="text-center text-white">
+						by
+						<a
+							href="https://tec.mx"
+							class="text-p-accent md:text-xl text-base underline"
+							target="_blank"
+						>
+							Tecnológico de Monterrey
+						</a>
+					</p>
+				</div>
 			</div>
 			<div class="absolute h-full w-full text-white">
 				<Background />
@@ -32,9 +45,27 @@ import "@/styles/globals.css";
 		</div>
 		<section id="about" class="flex flex-col gap-10 py-16 pt-32">
 			<div class="flex flex-col gap-7 lg:px-36 md:px-24 px-16">
-				<h2 class="text-4xl font-bold text-center">¿Qué es HackMx?</h2>
+				<h2 class="text-4xl font-bold text-center">Bienvenido a HACKMX VI</h2>
 				<p class="text-lg text-center text-p-secondary-text">
-					HackMx es un evento anual de innovación y tecnología organizado por el
+					El Tecnológico de Monterrey se complace en anunciar la sexta edición
+					de hackmx, un evento centrado en la inteligencia artificial que
+					promete ser un punto de encuentro para estudiantes talentosos y
+					apasionados de todos nuestros campus. Estamos entusiasmados de ver
+					cómo esta comunidad diversa de innovadores se une para colaborar,
+					compartir ideas y enfrentar juntos desafíos emocionantes en un
+					ambiente dinámico y competitivo. Esta edición de hackmx no solo
+					representa una oportunidad para que los participantes demuestren sus
+					habilidades técnicas y creativas en el ámbito de la inteligencia
+					artificial, sino también para que formen conexiones significativas y
+					se inspiren mutuamente en su camino hacia la creación de soluciones
+					tecnológicas impactantes.
+				</p>
+				<div class="h-96">
+					<Bug client:only />
+				</div>
+				<h2 class="text-4xl font-bold text-center">¿Qué es HACKMX VI?</h2>
+				<p class="text-lg text-center text-p-secondary-text">
+					Hackmx es un evento anual de innovación y tecnología organizado por el
 					Tecnológico de Monterrey, que reúne a estudiantes de todos sus campus
 					para enfrentar retos de desarrollo tecnológico en un ambiente
 					competitivo y colaborativo. Durante 24 a 32 horas, los participantes
@@ -47,7 +78,7 @@ import "@/styles/globals.css";
 					Este hackathon no solo permite a los estudiantes demostrar sus
 					habilidades técnicas, sino que también promueve el desarrollo de
 					competencias en liderazgo, trabajo en equipo y comunicación efectiva.
-					A través de HackMx, el Tecnológico de Monterrey busca fomentar un
+					A través de hackmx, el Tecnológico de Monterrey busca fomentar un
 					ecosistema de innovación que prepare a los futuros líderes para
 					contribuir significativamente al avance tecnológico y social.
 				</p>
@@ -81,7 +112,7 @@ import "@/styles/globals.css";
 					<div class="p-6 max-w-sm">
 						<h3 class="text-xl font-semibold mb-4">Impacto y Alcance</h3>
 						<p class="text-base font-normal text-p-secondary-text">
-							HackMx trasciende los límites de un evento típico, impulsando la
+							hackmx trasciende los límites de un evento típico, impulsando la
 							creación de proyectos que evolucionan a startups tecnológicas y
 							generando un cambio real y medible.
 						</p>
@@ -93,7 +124,7 @@ import "@/styles/globals.css";
 			<div class="flex flex-col gap-7 lg:px-36 md:px-24 px-16">
 				<h2 class="text-4xl font-bold text-center">Patrocinadores</h2>
 				<p class="text-lg text-center text-p-secondary-text">
-					El éxito de HackMx no sería posible sin el apoyo de nuestros
+					El éxito de hackmx no sería posible sin el apoyo de nuestros
 					patrocinadores, quienes creen en el talento y la creatividad de los
 					estudiantes del Tecnológico de Monterrey. Gracias a su colaboración,
 					podemos ofrecer a los participantes una experiencia única y
@@ -109,7 +140,7 @@ import "@/styles/globals.css";
 			<div class="flex flex-col gap-7 lg:px-36 md:px-24 px-16">
 				<h2 class="text-4xl font-bold text-center">FQA</h2>
 				<p class="text-lg text-center text-p-secondary-text">
-					¿Tienes dudas sobre cómo participar en HackMx? Consulta nuestra
+					¿Tienes dudas sobre cómo participar en hackmx? Consulta nuestra
 					sección de preguntas frecuentes para obtener más información sobre el
 					evento, los requisitos de inscripción, los premios y mucho más.
 				</p>
@@ -121,7 +152,7 @@ import "@/styles/globals.css";
 							¿Quiénes pueden participar?
 						</h3>
 						<p class="text-lg text-p-secondary-text font-normal">
-							HackMx está abierto a estudiantes de cualquier universidad, nivel
+							hackmx está abierto a estudiantes de cualquier universidad, nivel
 							académico y edad, siempre y cuando estén inscritos en una
 							institución educativa.
 						</p>
@@ -153,7 +184,7 @@ import "@/styles/globals.css";
 							¿Se necesita saber programar?
 						</h3>
 						<p class="text-lg text-p-secondary-text font-normal">
-							No es necesario saber programar. HackMx fomenta equipos
+							No es necesario saber programar. Hackmx fomenta equipos
 							multidisciplinarios, por lo que se recomienda contar con miembros
 							que tengan habilidades en diseño, desarrollo y negocios.
 						</p>
@@ -165,8 +196,9 @@ import "@/styles/globals.css";
 							¿Cuánto tiempo dura el evento?
 						</h3>
 						<p class="text-lg text-p-secondary-text font-normal">
-							El hackatón tiene una duración de 24 a 32 horas continuas, durante las
-							cuales los participantes trabajan intensamente en sus proyectos.
+							El hackatón tiene una duración de 24 a 32 horas continuas, durante
+							las cuales los participantes trabajan intensamente en sus
+							proyectos.
 						</p>
 					</div>
 				</Card>
@@ -188,7 +220,7 @@ import "@/styles/globals.css";
 							¿La participación tiene costo?
 						</h3>
 						<p class="text-lg text-p-secondary-text font-normal">
-							No, la participación en HackMx es completamente gratuita. También
+							No, la participación en hackmx es completamente gratuita. También
 							se proporcionan servicios alimenticios y recreativos durante el
 							evento sin costo alguno.
 						</p>
@@ -200,7 +232,7 @@ import "@/styles/globals.css";
 			<div class="flex flex-col gap-7 lg:px-36 md:px-24 px-16">
 				<h2 class="text-4xl font-bold text-center">Contacto</h2>
 				<p class="text-lg text-center text-p-secondary-text">
-					¿Tienes alguna pregunta o comentario sobre HackMx? ¡Contáctanos!
+					¿Tienes alguna pregunta o comentario sobre hackmx? ¡Contáctanos!
 					Estamos a tu disposición para resolver tus dudas y brindarte la
 					información que necesitas para participar en nuestro hackathon, solo
 					manda un correo a <a

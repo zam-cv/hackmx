@@ -53,6 +53,5 @@ export default function Tasks({ eventId }: { eventId: number | null }) {
         </ol>
       </div>
     </>
-
   )
 }

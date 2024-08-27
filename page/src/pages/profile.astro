@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Avatar from "@/components/Avatar";
 import EditProfile from "@/components/EditProfile";
+import Particles from "@/components/Particles";
 import "@/styles/globals.css";
 ---
 
@@ -12,8 +13,9 @@ import "@/styles/globals.css";
   </Header>
   <div slot="content">
     <div
-      class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] flex justify-center items-center"
+      class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] flex justify-center items-center relative"
     >
+      <Particles client:only />
       <EditProfile client:only />
     </div>
   </div>

@@ -157,6 +157,13 @@ export default function EventDetails() {
           <Tasks eventId={id} />
         </div>
       </div>
+      <div className="h-96 w-full">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3758.79851021442!2d-99.23062555369646!3d19.593131082826712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d21db668855ad3%3A0xee1a52e08e9baf1!2sTecnol%C3%B3gico%20Monterrey!5e0!3m2!1ses-419!2smx!4v1724686584579!5m2!1ses-419!2smx"
+          width="100%" height="100%" style={{ border: "0", filter: "contrast(0.9) invert(1) sepia(0.5) saturate(1.2) hue-rotate(180deg)" }}
+          allowFullScreen={false} loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"></iframe>
+      </div>
     </>
   );
 }
