@@ -50,6 +50,8 @@ diesel::table! {
         end_date -> Timestamp,
         #[max_length = 100]
         location -> Varchar,
+        #[max_length = 600]
+        map_url -> Varchar,
     }
 }
 

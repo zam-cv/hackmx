@@ -23,7 +23,7 @@ export default function Avatar({ visible }: { visible?: boolean }) {
   }
 
   return (
-    <div className={`flex items-center h-full px-7 cursor-pointer ${visible === undefined || visible === false ? "max-lg:hidden" : ""}`}>
+    <div className={`flex items-center h-full pr-7 cursor-pointer ${visible === undefined || visible === false ? "max-lg:hidden" : ""}`}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="icon" className="rounded-full bg-p-secondary-background focus-visible:ring-0 select-none">

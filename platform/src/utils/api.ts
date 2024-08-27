@@ -17,6 +17,7 @@ export interface SimpleEvent {
   start_date: string;
   end_date: string;
   location: string;
+  map_url: string;
 }
 
 export interface Event extends SimpleEvent {

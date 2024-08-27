@@ -62,7 +62,7 @@ export default function Bug() {
           enablePan={true}
           minDistance={0.1}
           maxDistance={200}
-          enableZoom={true}
+          enableZoom={false}
           makeDefault
         />
 

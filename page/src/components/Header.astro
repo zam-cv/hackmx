@@ -1,4 +1,6 @@
 ---
+import Tec from '@/components/Tec';
+
 interface Props {
   withMenu: boolean;
   mainRoute: string;
@@ -67,6 +69,9 @@ const { withMenu, mainRoute } = Astro.props;
           </button>
         )
       }
+      <div class="pr-5">
+        <Tec className='h-9 w-auto object-contain' />
+      </div>
     </div>
     <div>
       <slot name="avatar" />

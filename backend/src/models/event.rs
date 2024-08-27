@@ -21,6 +21,8 @@ pub struct Event {
     pub end_date: chrono::NaiveDateTime,
     #[validate(length(min = 2, max = 100))]
     pub location: String,
+    #[validate(length(min = 2, max = 600))]
+    pub map_url: String,
 }
 
 #[derive(Deserialize, Serialize, Validate)]

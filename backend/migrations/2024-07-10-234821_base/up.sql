@@ -30,7 +30,8 @@ CREATE TABLE "events"(
 	"quota_per_team" INT4 NOT NULL,
 	"start_date" TIMESTAMP NOT NULL,
 	"end_date" TIMESTAMP NOT NULL,
-	"location" VARCHAR(100) NOT NULL
+	"location" VARCHAR(100) NOT NULL,
+	"map_url" VARCHAR(600) NOT NULL
 );
 
 CREATE TABLE "event_participants"(

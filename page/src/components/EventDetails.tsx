@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Timer from "@/components/Timer";
 import Button from "@/components/Button";
 import { getQueryParam } from "@/utils";
-import api, { type RegistrationDetails } from "@/utils/api";
+import api, { type RegistrationDetails, type Event } from "@/utils/api";
 import { format } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
 import Tasks from "@/components/Tasks";
@@ -15,14 +15,15 @@ export default function EventDetails() {
   const [participants, setParticipants] = useState<number>(0);
   const [quota, setQuota] = useState<number>(0);
   const [id, setId] = useState<number | null>(null);
-  const [event, setEvent] = useState({
+  const [event, setEvent] = useState<Event>({
     id: 0,
     title: "HackMx ...",
     description: "...",
     quota_per_team: 4,
     start_date: "2022-01-01T00:00:00Z",
     end_date: "2022-01-01T00:00:00Z",
-    location: "Campus Estado de México"
+    location: "Campus Estado de México",
+    map_url: "...",
   });
 
   const [withBus, setWithBus] = useState<boolean>(false);
@@ -159,7 +160,7 @@ export default function EventDetails() {
       </div>
       <div className="h-96 w-full">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3758.79851021442!2d-99.23062555369646!3d19.593131082826712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d21db668855ad3%3A0xee1a52e08e9baf1!2sTecnol%C3%B3gico%20Monterrey!5e0!3m2!1ses-419!2smx!4v1724686584579!5m2!1ses-419!2smx"
+          src={event.map_url}
           width="100%" height="100%" style={{ border: "0", filter: "contrast(0.9) invert(1) sepia(0.5) saturate(1.2) hue-rotate(180deg)" }}
           allowFullScreen={false} loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"></iframe>

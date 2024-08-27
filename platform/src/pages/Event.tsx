@@ -33,6 +33,7 @@ export default function Event() {
   const [startDate, setStartDate] = useState("2022-01-01T00:00:00Z");
   const [endDate, setEndDate] = useState("2022-01-01T00:00:00Z");
   const [location, setLocation] = useState("...");
+  const [mapUrl, setMapUrl] = useState("...");
 
   useEffect(() => {
     api.events.get(parseInt(id || ""))
@@ -44,6 +45,7 @@ export default function Event() {
         setStartDate(event.start_date);
         setEndDate(event.end_date);
         setLocation(event.location);
+        setMapUrl(event.map_url);
       })
   }, [id]);
 
@@ -59,7 +61,8 @@ export default function Event() {
       quota_per_team: quotaPerTeam,
       start_date: startDate,
       end_date: endDate,
-      location
+      location,
+      map_url: mapUrl
     };
 
     setEvent(newEvent);
@@ -98,7 +101,7 @@ export default function Event() {
                   <form className="grid gap-4 p-4">
                     <div className="grid gap-2">
                       <Label htmlFor="title">Title</Label>
-                      <Input type="title" id="title" defaultValue={title} onChange={(e) => { setTitle(e.currentTarget.value) }} />
+                      <Input type="text" id="title" defaultValue={title} onChange={(e) => { setTitle(e.currentTarget.value) }} />
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="description">Description</Label>
@@ -106,7 +109,7 @@ export default function Event() {
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="location">Location</Label>
-                      <Input type="location" id="location" defaultValue={location} onChange={(e) => { setLocation(e.currentTarget.value) }} />
+                      <Input type="text" id="location" defaultValue={location} onChange={(e) => { setLocation(e.currentTarget.value) }} />
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="start_date">Start Date</Label>
@@ -133,6 +136,10 @@ export default function Event() {
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="map_url">Map URL</Label>
+                      <Input type="text" id="map_url" defaultValue={mapUrl} onChange={(e) => { setMapUrl(e.currentTarget.value) }} />
                     </div>
                   </form>
                   <DrawerFooter>

@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Avatar from "@/components/Avatar";
 import Events from "@/components/Events";
+import Particles from "@/components/Particles";
 import "@/styles/globals.css";
 ---
 
@@ -12,8 +13,9 @@ import "@/styles/globals.css";
   </Header>
   <div slot="content">
     <div
-      class="w-full md:h-[calc(100vh-8rem)] h-[calc(100vh-7rem)] flex flex-wrap p-10"
+      class="w-full md:h-[calc(100vh-8rem)] h-[calc(100vh-7rem)] flex flex-wrap p-10 relative"
     >
+      <Particles client:only />
       <Events client:only />
     </div>
   </div>

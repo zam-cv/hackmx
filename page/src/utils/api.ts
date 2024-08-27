@@ -39,6 +39,7 @@ export interface Event {
   start_date: string;
   end_date: string;
   location: string;
+  map_url: string;
 }
 
 export interface EventTask {
