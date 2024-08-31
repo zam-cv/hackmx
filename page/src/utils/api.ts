@@ -1,4 +1,4 @@
-import { post, get } from "./methods";
+import { post, get, upload } from "./methods";
 
 export interface User {
   username: string;
@@ -56,8 +56,8 @@ export interface QuestionAndAnswer {
 }
 
 export interface RegistrationDetails {
-  user_in_event: boolean,
-  quota_available: boolean,
+  user_in_event: boolean;
+  quota_available: boolean;
 }
 
 export interface Team {
@@ -66,6 +66,7 @@ export interface Team {
   description: string;
   user_id: number;
 }
+
 
 export interface InfoTeam {
   id: number;
@@ -85,6 +86,11 @@ export interface Document {
   name: string;
 }
 
+export interface Image {
+  id: number;
+  name: string;
+}
+
 export interface Post {
   id: number;
   title: string;
@@ -94,6 +100,15 @@ export interface Post {
 
 export interface Message {
   content: string;
+}
+
+export interface Project {
+  id: number;
+  name: string;
+  url: string;
+  sponsor_id: number;
+  zip: string;
+  description: string;
 }
 
 export default {
@@ -109,12 +124,12 @@ export default {
     },
     verify: (): Promise<UserInformation> => {
       return get("/auth/user/verify");
-    }
+    },
   },
   sponsors: {
     list: (): Promise<Sponsor[]> => {
       return get(`/sponsor/all`, false);
-    }
+    },
   },
   tec: {
     majors: (): Promise<string[]> => {
@@ -122,10 +137,10 @@ export default {
     },
     campus: (): Promise<string[]> => {
       return get("/tec/campus_list", false);
-    }
+    },
   },
   events: {
-    list: (): Promise<Event[]> => {
+    list: (): Promise<[Event, boolean][]> => {
       return get("/event/all");
     },
     get: (id: number): Promise<Event> => {
@@ -149,7 +164,9 @@ export default {
     registerToEvent: (event_id: number, with_bus: boolean): Promise<void> => {
       return post(`/event/${event_id}/register`, { with_bus });
     },
-    getRegistrationDetails: (event_id: number): Promise<RegistrationDetails> => {
+    getRegistrationDetails: (
+      event_id: number
+    ): Promise<RegistrationDetails> => {
       return get(`/event/${event_id}/registration-details`);
     },
     createTeam: (event_id: number): Promise<Team> => {
@@ -161,16 +178,21 @@ export default {
     getTeams: async (event_id: number): Promise<InfoTeam[]> => {
       return get(`/event/teams/${event_id}`).then((info: any) => {
         return info.map(
-          ([id, name, isPrivate, members]: [number, string, boolean, number]) => {
+          ([id, name, isPrivate, members]: [
+            number,
+            string,
+            boolean,
+            number
+          ]) => {
             return {
               id,
               name,
               isPrivate,
-              members
-            }
+              members,
+            };
           }
-        )
-      })
+        );
+      });
     },
     getCode: (event_id: number): Promise<string> => {
       return get(`/event/team/${event_id}/code`);
@@ -184,10 +206,19 @@ export default {
     deleteTeam: (event_id: number, team_id: number): Promise<void> => {
       return post(`/event/team/${event_id}/edit/${team_id}/delete-team`, {});
     },
-    joinTeam: (event_id: number, team_id: number, code: string): Promise<void> => {
-      return post(`/event/team/${event_id}/edit/${team_id}/join-team`, code as any);
+    joinTeam: (
+      event_id: number,
+      team_id: number,
+      code: string
+    ): Promise<void> => {
+      return post(
+        `/event/team/${event_id}/edit/${team_id}/join-team`,
+        code as any
+      );
     },
-    getMembersWithLeader: (team_id: number): Promise<[[number, string], [number, string][]]> => {
+    getMembersWithLeader: (
+      team_id: number
+    ): Promise<[[number, string], [number, string][]]> => {
       return get(`/event/members/team/${team_id}`);
     },
     leaveTeam: (event_id: number, team_id: number): Promise<void> => {
@@ -196,14 +227,23 @@ export default {
     updateTeamName: (event_id: number, name: string): Promise<void> => {
       return post(`/event/update-team/${event_id}/name`, name as any);
     },
-    updateTeamDescription: (event_id: number, description: string): Promise<void> => {
-      return post(`/event/update-team/${event_id}/description`, description as any);
+    updateTeamDescription: (
+      event_id: number,
+      description: string
+    ): Promise<void> => {
+      return post(
+        `/event/update-team/${event_id}/description`,
+        description as any
+      );
     },
     updateTeamCode: (event_id: number, code: string): Promise<void> => {
       return post(`/event/update-team/${event_id}/code`, code as any);
     },
     deleteMember: (event_id: number, member_id: number): Promise<void> => {
-      return post(`/event/update-team/${event_id}/delete-member/${member_id}`, {});
+      return post(
+        `/event/update-team/${event_id}/delete-member/${member_id}`,
+        {}
+      );
     },
     getDocuments: (event_id: number): Promise<Document[]> => {
       return get(`/event/documents/${event_id}`);
@@ -214,9 +254,17 @@ export default {
     sendMessage: (event_id: number, content: string): Promise<void> => {
       return post(`/event/send-message/${event_id}`, { content } as Message);
     },
-    getSponsorsNames: (event_id: number): Promise<string[]> => {
-      return get(`/event/sponsor-names/${event_id}`);
-    }
+    getSponsorsWithIdAndNames: (
+      event_id: number
+    ): Promise<[number, string][]> => {
+      return get(`/event/sponsors-with-id-and-names/${event_id}`);
+    },
+    getEventInfo: (event_id: number): Promise<[string, string]> => {
+      return get(`/event/event-info/${event_id}`);
+    },
+    isInEvent: (event_id: number): Promise<void> => {
+      return get(`/event/is-in-event/${event_id}`);
+    },
   },
   user: {
     get: (): Promise<User> => {
@@ -227,6 +275,33 @@ export default {
     },
     info: (): Promise<[number, string]> => {
       return get(`/user/info`);
+    },
+  },
+  projects: {
+    uploadProject: (
+      event_id: number,
+      file: File,
+      metadata: Project
+    ): Promise<Sponsor> => {
+      return upload(
+        `/projects/upload/${event_id}`,
+        file,
+        metadata
+      );
+    },
+    getProject: (event_id: number): Promise<Project | null> => {
+      return get(`/projects/get/${event_id}`);
+    },
+    updateProject: (event_id: number, file: File, metadata: Project): Promise<void> => {
+      return upload(`/projects/update/${event_id}`, file, metadata);
+    },
+    myProjects: (): Promise<Project[]> => {
+      return get(`/projects/user`);
     }
+  },
+  gallery: {
+    getImages: (): Promise<[string, Image[]][]> => {
+      return get(`/gallery`);
+    },
   }
 };

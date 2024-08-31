@@ -100,6 +100,17 @@ CREATE TABLE "teams"(
 	FOREIGN KEY ("user_id") REFERENCES "users"("id")
 );
 
+CREATE TABLE "projects"(
+	"id" SERIAL PRIMARY KEY,
+	"name" VARCHAR(500) NOT NULL,
+	"url" VARCHAR(500) NOT NULL,
+	"sponsor_id" INT4 NOT NULL,
+	"team_id" INT4 NOT NULL,
+	"zip" VARCHAR(200) NOT NULL,
+	"description" VARCHAR(1000) NOT NULL,
+	FOREIGN KEY ("sponsor_id") REFERENCES "sponsors"("id")
+);
+
 CREATE TABLE "members"(
 	"id" SERIAL PRIMARY KEY,
 	"team_id" INT4 NOT NULL,
@@ -109,6 +120,13 @@ CREATE TABLE "members"(
 );
 
 CREATE TABLE "documents"(
+	"id" SERIAL PRIMARY KEY,
+	"event_id" INT4 NOT NULL,
+	"name" VARCHAR(100) NOT NULL,
+	FOREIGN KEY ("event_id") REFERENCES "events"("id")
+);
+
+CREATE TABLE "gallery"(
 	"id" SERIAL PRIMARY KEY,
 	"event_id" INT4 NOT NULL,
 	"name" VARCHAR(100) NOT NULL,

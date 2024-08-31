@@ -9,10 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { WrapperTasks } from "@/components/Tasks";
 import UploadProject from "@/components/UploadProject";
 import SponsorsInEvent from "@/components/SponsorsInEvent";
+import EventInfo from "@/components/EventInfo";
 import "@/styles/globals.css";
 ---
 
-<Layout title="HackMx - Event">
+<Layout title="HackMx - Evento">
   <Header slot="header" withMenu={false} mainRoute="/dashboard">
     <Avatar slot="avatar" visible client:only />
   </Header>
@@ -20,6 +21,7 @@ import "@/styles/globals.css";
     <div
       class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)] p-16 flex flex-col gap-10 max-[450px]:px-10"
     >
+      <EventInfo client:only />
       <SponsorsInEvent client:only />
       <Publications client:only />
       <Documents client:only />
@@ -27,7 +29,9 @@ import "@/styles/globals.css";
         <div>
           <WrapperTasks client:only />
         </div>
-        <div class="px-20 max-[1300px]:px-0 max-lg:px-20 max-md:px-10 max-sm:px-0">
+        <div
+          class="px-20 max-[1300px]:px-0 max-lg:px-20 max-md:px-10 max-sm:px-0"
+        >
           <UploadProject client:only />
         </div>
       </div>
@@ -57,9 +61,15 @@ import "@/styles/globals.css";
   import api from "@/utils/api";
   import { getQueryParam } from "@/utils";
 
+  const eventId = getQueryParam("id");
+
+  if (!eventId || isNaN(parseInt(eventId))) {
+    window.location.href = "/dashboard";
+  }
+
   function send() {
     const message = document.getElementById(
-      "message",
+      "message"
     ) as HTMLInputElement | null;
     if (!message) return;
 

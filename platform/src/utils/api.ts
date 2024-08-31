@@ -69,6 +69,11 @@ export interface Document {
   name: string;
 }
 
+export interface Image {
+  id: number;
+  name: string;
+}
+
 export interface Message {
   id: number;
   content: string;
@@ -103,6 +108,21 @@ export interface Participant extends User {
   confirmed: boolean;
   with_bus: boolean;
   team: string;
+}
+
+export interface Team {
+  id: number;
+  name: string;
+  description: string;
+  code: number;
+}
+
+export interface Project {
+  id: number;
+  name: string;
+  url: string;
+  zip: string;
+  description: string;
 }
 
 export default {
@@ -322,6 +342,21 @@ export default {
       return get(`/admin/document/all/${event_id}`);
     },
   },
+  gallery: {
+    upload: (
+      event_id: number,
+      file: File,
+      metadata: Object
+    ): Promise<Image> => {
+      return upload(`/admin/gallery/upload/${event_id}`, file, metadata);
+    },
+    delete: (image_id: number): Promise<void> => {
+      return del(`/admin/gallery/delete/${image_id}`);
+    },
+    list: (event_id: number): Promise<Image[]> => {
+      return get(`/admin/gallery/all/${event_id}`);
+    },
+  },
   messages: {
     list: (event_id: number): Promise<[Message, string, string | null][]> => {
       return get(`/admin/message/all/${event_id}`);
@@ -350,6 +385,11 @@ export default {
   tec: {
     getCampus: (): Promise<string[]> => {
       return get("/admin/tec/campus_list");
+    }
+  },
+  teams: {
+    getTeams: (event_id: number): Promise<[Team, [Project, string] | null, [string, string][]][]> => {
+      return get(`/admin/teams/${event_id}`);
     }
   }
 };

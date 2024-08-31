@@ -19,11 +19,15 @@ struct RegistrationDetails {
 }
 
 #[get("/all")]
-async fn get_events(database: web::Data<Database>) -> impl Responder {
-    match database.get_events_all().await {
-        Ok(events) => HttpResponse::Ok().json(events),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+async fn get_events(req: HttpRequest, database: web::Data<Database>) -> impl Responder {
+    if let Some(user_id) = req.extensions().get::<i32>() {
+        return match database.get_events_with_user_in_event(*user_id).await {
+            Ok(events) => HttpResponse::Ok().json(events),
+            Err(_) => HttpResponse::InternalServerError().finish(),
+        };
     }
+
+    HttpResponse::BadRequest().finish()
 }
 
 #[get("")]
@@ -515,15 +519,31 @@ async fn send_message(
     }
 }
 
-#[get("sponsor-names/{event_id}")]
-async fn get_sponsor_names(
+#[get("sponsors-with-id-and-names/{event_id}")]
+async fn get_sponsors_with_id_and_name(
     database: web::Data<Database>,
     event_id: web::Path<i32>,
 ) -> impl Responder {
-    match database.get_sponsors_name_by_event_id(event_id.into_inner()).await {
+    match database.get_sponsors_with_id_and_name_by_event_id(event_id.into_inner()).await {
         Ok(sponsors) => HttpResponse::Ok().json(sponsors),
         Err(_) => HttpResponse::InternalServerError().finish(),
     }
+}
+
+#[get("event-info/{event_id}")]
+async fn get_event_info(
+    database: web::Data<Database>,
+    event_id: web::Path<i32>,
+) -> impl Responder {
+    match database.get_event_info_by_id(event_id.into_inner()).await {
+        Ok(event) => HttpResponse::Ok().json(event),
+        Err(_) => HttpResponse::InternalServerError().finish(),
+    }
+}
+
+#[get("")]
+async fn is_in_event() -> impl Responder {
+    return HttpResponse::Ok().finish();
 }
 
 pub fn routes() -> actix_web::Scope {
@@ -538,7 +558,13 @@ pub fn routes() -> actix_web::Scope {
         .service(get_team_quota_by_event_id)
         .service(get_members_by_team_id)
         .service(get_team_info)
-        .service(get_sponsor_names)
+        .service(get_sponsors_with_id_and_name)
+        .service(get_event_info)
+        .service(
+            web::scope("/is-in-event/{event_id}")
+                .wrap(from_fn(middlewares::user_in_event_middleware))
+                .service(is_in_event),
+        )
         .service(
             web::scope("/send-message/{event_id}")
                 .wrap(from_fn(middlewares::user_in_event_middleware))

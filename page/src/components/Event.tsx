@@ -3,7 +3,7 @@ import Card from "@/components/Card";
 import { type Event as IEvent } from "@/utils/api";
 import { format } from "date-fns";
 
-export default function Event({ event }: { event: IEvent }) {
+export default function Event({ event, user_in_event }: { event: IEvent, user_in_event: boolean }) {
   const [isEventFinished, setIsEventFinished] = useState<boolean>(false);
   const [isEventActive, setIsEventActive] = useState<boolean>(false);
 
@@ -18,7 +18,7 @@ export default function Event({ event }: { event: IEvent }) {
   return (
     <a
       className="min-h-56 max-h-96 max-w-[30rem]" 
-      href={`${isEventFinished ? "/dashboard" : (isEventActive ? `/event/?id=${event.id}` : `/invitation/?id=${event.id}`)}`}
+      href={`${isEventFinished ? "/dashboard" : (isEventActive ? (user_in_event ? `/event/?id=${event.id}` : "/dashboard") : `/invitation/?id=${event.id}`)}`}
     >
       <Card>
         <div className="w-full h-full p-5 grid grid-rows-[auto_1fr_auto] gap-2">

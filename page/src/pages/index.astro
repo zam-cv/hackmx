@@ -8,11 +8,12 @@ import Sponsors from "@/components/Sponsors";
 import Card from "@/components/Card";
 import Bug from "@/components/models/Bug";
 import Tec from "@/components/Tec";
+import Robot from "@/components/models/Robot";
 import "@/styles/globals.css";
 ---
 
-<Layout title="HACKMX - Principal">
-	<Header slot="header" withMenu mainRoute="/dashboard">
+<Layout title="HackMx - Principal">
+	<Header slot="header" withMenu mainRoute="/">
 		<MainNav slot="nav" />
 		<Fragment slot="action">
 			<LinkAsButton href="/login">Inscribirse</LinkAsButton>
@@ -49,15 +50,15 @@ import "@/styles/globals.css";
 		</div>
 		<section id="about" class="flex flex-col gap-10 py-16 pt-32">
 			<div class="flex flex-col gap-7 lg:px-36 md:px-24 px-10">
-				<h2 class="text-4xl font-bold text-center">Bienvenido a HACKMX VI</h2>
+				<h2 class="text-4xl font-bold text-center">Bienvenido a HackMx VI</h2>
 				<p class="text-lg text-center text-p-secondary-text">
 					El Tecnológico de Monterrey se complace en anunciar la sexta edición
-					de hackmx, un evento centrado en la inteligencia artificial que
+					de HackMx, un evento centrado en la inteligencia artificial que
 					promete ser un punto de encuentro para estudiantes talentosos y
 					apasionados de todos nuestros campus. Estamos entusiasmados de ver
 					cómo esta comunidad diversa de innovadores se une para colaborar,
 					compartir ideas y enfrentar juntos desafíos emocionantes en un
-					ambiente dinámico y competitivo. Esta edición de hackmx no solo
+					ambiente dinámico y competitivo. Esta edición de HackMx no solo
 					representa una oportunidad para que los participantes demuestren sus
 					habilidades técnicas y creativas en el ámbito de la inteligencia
 					artificial, sino también para que formen conexiones significativas y
@@ -67,9 +68,9 @@ import "@/styles/globals.css";
 				<div class="h-96">
 					<Bug client:only />
 				</div>
-				<h2 class="text-4xl font-bold text-center">¿Qué es HACKMX VI?</h2>
+				<h2 class="text-4xl font-bold text-center">¿Qué es?</h2>
 				<p class="text-lg text-center text-p-secondary-text">
-					Hackmx es un evento anual de innovación y tecnología organizado por el
+					HackMx es un evento anual de innovación y tecnología organizado por el
 					Tecnológico de Monterrey, que reúne a estudiantes de todos sus campus
 					para enfrentar retos de desarrollo tecnológico en un ambiente
 					competitivo y colaborativo. Durante 24 a 32 horas, los participantes
@@ -116,7 +117,7 @@ import "@/styles/globals.css";
 					<div class="p-6 max-w-sm">
 						<h3 class="text-xl font-semibold mb-4">Impacto y Alcance</h3>
 						<p class="text-base font-normal text-p-secondary-text">
-							hackmx trasciende los límites de un evento típico, impulsando la
+							HackMx trasciende los límites de un evento típico, impulsando la
 							creación de proyectos que evolucionan a startups tecnológicas y
 							generando un cambio real y medible.
 						</p>
@@ -128,7 +129,7 @@ import "@/styles/globals.css";
 			<div class="flex flex-col gap-7 lg:px-36 md:px-24 px-10">
 				<h2 class="text-4xl font-bold text-center">Patrocinadores</h2>
 				<p class="text-lg text-center text-p-secondary-text">
-					El éxito de hackmx no sería posible sin el apoyo de nuestros
+					El éxito de HackMx no sería posible sin el apoyo de nuestros
 					patrocinadores, quienes creen en el talento y la creatividad de los
 					estudiantes del Tecnológico de Monterrey. Gracias a su colaboración,
 					podemos ofrecer a los participantes una experiencia única y
@@ -144,7 +145,7 @@ import "@/styles/globals.css";
 			<div class="flex flex-col gap-7 lg:px-36 md:px-24 px-10">
 				<h2 class="text-4xl font-bold text-center">FQA</h2>
 				<p class="text-lg text-center text-p-secondary-text">
-					¿Tienes dudas sobre cómo participar en hackmx? Consulta nuestra
+					¿Tienes dudas sobre cómo participar en HackMx? Consulta nuestra
 					sección de preguntas frecuentes para obtener más información sobre el
 					evento, los requisitos de inscripción, los premios y mucho más.
 				</p>
@@ -156,7 +157,7 @@ import "@/styles/globals.css";
 							¿Quiénes pueden participar?
 						</h3>
 						<p class="text-lg text-p-secondary-text font-normal">
-							hackmx está abierto a estudiantes de cualquier universidad, nivel
+							HackMx está abierto a estudiantes de cualquier universidad, nivel
 							académico y edad, siempre y cuando estén inscritos en una
 							institución educativa.
 						</p>
@@ -188,7 +189,7 @@ import "@/styles/globals.css";
 							¿Se necesita saber programar?
 						</h3>
 						<p class="text-lg text-p-secondary-text font-normal">
-							No es necesario saber programar. Hackmx fomenta equipos
+							No es necesario saber programar. HackMx fomenta equipos
 							multidisciplinarios, por lo que se recomienda contar con miembros
 							que tengan habilidades en diseño, desarrollo y negocios.
 						</p>
@@ -224,7 +225,7 @@ import "@/styles/globals.css";
 							¿La participación tiene costo?
 						</h3>
 						<p class="text-lg text-p-secondary-text font-normal">
-							No, la participación en hackmx es completamente gratuita. También
+							No, la participación en HackMx es completamente gratuita. También
 							se proporcionan servicios alimenticios y recreativos durante el
 							evento sin costo alguno.
 						</p>
@@ -236,16 +237,19 @@ import "@/styles/globals.css";
 			<div class="flex flex-col gap-7 lg:px-36 md:px-24 px-10">
 				<h2 class="text-4xl font-bold text-center">Contacto</h2>
 				<p class="text-lg text-center text-p-secondary-text">
-					¿Tienes alguna pregunta o comentario sobre hackmx? ¡Contáctanos!
+					¿Tienes alguna pregunta o comentario sobre HackMx? ¡Contáctanos!
 					Estamos a tu disposición para resolver tus dudas y brindarte la
 					información que necesitas para participar en nuestro hackathon, solo
 					manda un correo a <a
-						href="mailto:hello@hackmx.com"
+						href="mailto:hello@hackmx.mx"
 						class="text-p-accent font-semibold"
 					>
-						hello@hackmx.com
+						hello@hackmx.mx
 					</a>
 				</p>
+			</div>
+			<div class="h-52">
+				<Robot client:only />
 			</div>
 		</section>
 	</div>

@@ -14,7 +14,7 @@ const { withMenu, mainRoute } = Astro.props;
 >
   <div class="px-5 flex items-center">
     <a href={mainRoute} class="h-full w-full flex gap-5 items-center">
-      <div class="relative h-full w-14 max-lg:w-10 flex">
+      <div class="relative h-full w-14 max-[1300px]:w-10 flex">
         <img
           src="/logo.png"
           alt="logo"
@@ -29,19 +29,19 @@ const { withMenu, mainRoute } = Astro.props;
   <div class="grid grid-cols-[1fr_auto_auto_auto]">
     <div
       id="nav"
-      class="grid max-lg:hidden grid-cols-[1fr_auto] max-lg:flex max-lg:pr-12 max-lg:flex-col max-lg:fixed max-lg:bg-p-secondary-background top-0 right-0 max-lg:h-full z-10"
+      class="grid max-[1300px]:hidden grid-cols-[1fr_auto] max-[1300px]:flex max-[1300px]:pr-12 max-[1300px]:flex-col max-[1300px]:fixed max-[1300px]:bg-p-secondary-background top-0 right-0 max-[1300px]:h-full z-10"
     >
-      <div class="px-10 flex items-center max-lg:items-start max-lg:pt-10">
+      <div class="px-10 flex items-center max-[1300px]:items-start max-[1300px]:pt-10">
         <slot name="nav" />
       </div>
-      <div class="flex gap-5 px-5 items-center max-lg:p-10">
+      <div class="flex gap-5 px-5 items-center max-[1300px]:p-10">
         <slot name="action" />
       </div>
     </div>
     <div>
       <div
         id="back"
-        class="max-lg:fixed max-lg:hidden max-lg:bg-[#00000085] top-0 left-0 h-full w-full cursor-pointer"
+        class="max-[1300px]:fixed max-[1300px]:hidden max-[1300px]:bg-[#00000085] top-0 left-0 h-full w-full cursor-pointer"
       >
       </div>
     </div>
@@ -50,7 +50,7 @@ const { withMenu, mainRoute } = Astro.props;
         withMenu && (
           <button
             id="menu"
-            class="hidden max-lg:flex items-center p-5 cursor-pointer"
+            class="hidden max-[1300px]:flex items-center p-5 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -88,12 +88,12 @@ const { withMenu, mainRoute } = Astro.props;
   }
 
   menu?.addEventListener("click", () => {
-    nav?.classList.toggle("max-lg:hidden");
-    back?.classList.toggle("max-lg:hidden");
+    nav?.classList.toggle("max-[1300px]:hidden");
+    back?.classList.toggle("max-[1300px]:hidden");
   });
 
   back?.addEventListener("click", () => {
-    nav?.classList.toggle("max-lg:hidden");
-    back?.classList.toggle("max-lg:hidden");
+    nav?.classList.toggle("max-[1300px]:hidden");
+    back?.classList.toggle("max-[1300px]:hidden");
   });
 </script>

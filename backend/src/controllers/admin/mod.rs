@@ -4,6 +4,8 @@ pub mod storage;
 pub mod sponsor;
 pub mod university;
 pub mod documents;
+pub mod gallery;
 pub mod messages;
 pub mod fqa;
 pub mod participant;
+pub mod teams;

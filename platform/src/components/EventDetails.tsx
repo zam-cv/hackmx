@@ -8,7 +8,9 @@ import {
   Users,
   StickyNote,
   LayoutDashboard,
-  CircleHelp
+  CircleHelp,
+  Boxes,
+  GalleryThumbnails
 } from "lucide-react"
 import {
   Card,
@@ -76,6 +78,12 @@ export default function EventDetails({ id }: { id: number }) {
     </Detail>
     <Detail id={id} title="FQA" description="Frequently asked questions" message="Add, Delete ..." route="fqa">
       <CircleHelp className="h-4 w-4 text-muted-foreground" />
+    </Detail>
+    <Detail id={id} title="Teams" description="View and manage teams for this event" message="Add, Delete ..." route="teams">
+      <Boxes className="h-4 w-4 text-muted-foreground" />
+    </Detail>
+    <Detail id={id} title="Gallery" description="View the gallery for this event" message="Add, Delete ..." route="gallery">
+      <GalleryThumbnails className="h-4 w-4 text-muted-foreground" />
     </Detail>
     <Detail id={id} title="More" description="More details about the event" message="Delete, Archive ..." route="more">
       <Wrench className="h-4 w-4 text-muted-foreground" />

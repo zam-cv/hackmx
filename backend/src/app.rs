@@ -44,6 +44,8 @@ pub async fn app() -> std::io::Result<()> {
                             .service(controllers::admin::messages::routes())
                             .service(controllers::admin::fqa::routes())
                             .service(controllers::admin::participant::routes())
+                            .service(controllers::admin::gallery::routes())
+                            .service(controllers::admin::teams::routes())
                             .service(controllers::tec::routes())
                     )
                     .service(controllers::sponsor::routes())
@@ -52,6 +54,18 @@ pub async fn app() -> std::io::Result<()> {
                         .wrap(from_fn(middlewares::user_middleware))
                         .service(controllers::event::routes())
                         .service(controllers::user::routes())
+                        .service(controllers::projects::routes())
+                        .service(controllers::gallery::routes())
+                    )
+            )
+            // Private
+            .service(
+                web::scope("/private")
+                    .wrap(from_fn(middlewares::admin_middleware))
+                    .service(
+                        // Static files
+                        fs::Files::new("/", "./private")
+                        .show_files_listing()
                     )
             )
             .service(

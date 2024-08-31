@@ -139,9 +139,31 @@ impl Database {
         .await
     }
 
-    pub async fn get_events_all(&self) -> anyhow::Result<Vec<models::Event>> {
-        self.query_wrapper(move |conn| schema::events::table.load(conn))
-            .await
+    pub async fn get_events_with_user_in_event(
+        &self,
+        user_id: i32,
+    ) -> anyhow::Result<Vec<(models::Event, bool)>> {
+        self.query_wrapper(move |conn| {
+            let events = schema::events::table.load::<models::Event>(conn)?;
+
+            let mut result = Vec::new();
+
+            for event in events {
+                if let Some(id) = event.id {
+                    let is_user_in_event = schema::event_participants::table
+                        .filter(schema::event_participants::user_id.eq(user_id))
+                        .filter(schema::event_participants::event_id.eq(id))
+                        .first::<models::EventParticipant>(conn)
+                        .optional()?
+                        .is_some();
+
+                    result.push((event, is_user_in_event));
+                }
+            }
+
+            Ok(result)
+        })
+        .await
     }
 
     pub async fn get_event_by_id(&self, id: i32) -> anyhow::Result<Option<models::Event>> {
@@ -776,7 +798,6 @@ impl Database {
         })
         .await
     }
-
     pub async fn get_messages_with_username_and_team_by_event_id(
         &self,
         event_id: i32,
@@ -1481,13 +1502,313 @@ impl Database {
         .await
     }
 
-    pub async fn get_sponsors_name_by_event_id(&self, event_id: i32) -> anyhow::Result<Vec<String>> {
+    pub async fn get_sponsors_with_id_and_name_by_event_id(
+        &self,
+        event_id: i32,
+    ) -> anyhow::Result<Vec<(Option<i32>, String)>> {
         self.query_wrapper(move |conn| {
             schema::event_sponsors::table
                 .inner_join(schema::sponsors::table)
                 .filter(schema::event_sponsors::event_id.eq(event_id))
-                .select(schema::sponsors::name)
+                .select((schema::sponsors::id.nullable(), schema::sponsors::name))
                 .load(conn)
+        })
+        .await
+    }
+
+    pub async fn get_end_date_by_event_id(
+        &self,
+        event_id: i32,
+    ) -> anyhow::Result<chrono::NaiveDateTime> {
+        self.query_wrapper(move |conn| {
+            schema::events::table
+                .filter(schema::events::id.eq(event_id))
+                .select(schema::events::end_date)
+                .first(conn)
+        })
+        .await
+    }
+
+    pub async fn get_event_info_by_id(
+        &self,
+        event_id: i32,
+    ) -> anyhow::Result<(String, chrono::NaiveDateTime)> {
+        self.query_wrapper(move |conn| {
+            schema::events::table
+                .filter(schema::events::id.eq(event_id))
+                .select((schema::events::title, schema::events::end_date))
+                .first(conn)
+        })
+        .await
+    }
+
+    pub async fn create_project(&self, new_project: models::Project) -> anyhow::Result<i32> {
+        self.query_wrapper(move |conn| {
+            diesel::insert_into(schema::projects::table)
+                .values(&new_project)
+                .returning(schema::projects::id)
+                .get_result(conn)
+        })
+        .await
+    }
+
+    pub async fn delete_project_by_id(&self, id: i32) -> anyhow::Result<models::Project> {
+        self.query_wrapper(move |conn| {
+            let project = schema::projects::table.find(id).first(conn)?;
+            diesel::delete(schema::projects::table.find(id)).execute(conn)?;
+            Ok(project)
+        })
+        .await
+    }
+
+    pub async fn get_project_by_id(&self, id: i32) -> anyhow::Result<Option<models::Project>> {
+        self.query_wrapper(move |conn| schema::projects::table.find(id).first(conn).optional())
+            .await
+    }
+
+    pub async fn get_team_id_by_user_id_and_event_id(
+        &self,
+        user_id: i32,
+        event_id: i32,
+    ) -> anyhow::Result<Option<i32>> {
+        self.query_wrapper(move |conn| {
+            schema::teams::table
+                .filter(schema::teams::user_id.eq(user_id))
+                .filter(schema::teams::event_id.eq(event_id))
+                .select(schema::teams::id)
+                .first(conn)
+                .optional()
+        })
+        .await
+    }
+
+    pub async fn is_sponsor_available(
+        &self,
+        sponsor_id: i32,
+        event_id: i32,
+    ) -> anyhow::Result<bool> {
+        self.query_wrapper(move |conn| {
+            let result = schema::event_sponsors::table
+                .filter(schema::event_sponsors::event_id.eq(event_id))
+                .filter(schema::event_sponsors::sponsor_id.eq(sponsor_id))
+                .first::<models::EventSponsor>(conn)
+                .optional()?;
+
+            Ok(result.is_some())
+        })
+        .await
+    }
+
+    pub async fn exists_project_by_team_id(&self, team_id: i32) -> anyhow::Result<bool> {
+        self.query_wrapper(move |conn| {
+            let result = schema::projects::table
+                .filter(schema::projects::team_id.eq(team_id))
+                .first::<models::Project>(conn)
+                .optional()?;
+
+            Ok(result.is_some())
+        })
+        .await
+    }
+
+    pub async fn get_project_by_user_id_and_event_id(
+        &self,
+        user_id: i32,
+        event_id: i32,
+    ) -> anyhow::Result<Option<models::Project>> {
+        self.query_wrapper(move |conn| {
+            let team = schema::teams::table
+                .filter(schema::teams::user_id.eq(user_id))
+                .filter(schema::teams::event_id.eq(event_id))
+                .first::<models::Team>(conn)
+                .optional()?;
+
+            if let Some(team) = team {
+                if let Some(team_id) = team.id {
+                    return schema::projects::table
+                        .filter(schema::projects::team_id.eq(team_id))
+                        .first(conn)
+                        .optional();
+                }
+            }
+
+            Ok(None)
+        })
+        .await
+    }
+
+    pub async fn get_project_by_team_id(
+        &self,
+        team_id: i32,
+    ) -> anyhow::Result<Option<models::Project>> {
+        self.query_wrapper(move |conn| {
+            schema::projects::table
+                .filter(schema::projects::team_id.eq(team_id))
+                .first(conn)
+                .optional()
+        })
+        .await
+    }
+
+    pub async fn update_project_by_team_id(
+        &self,
+        team_id: i32,
+        new_project: models::Project,
+    ) -> anyhow::Result<()> {
+        self.query_wrapper(move |conn| {
+            let project = schema::projects::table
+                .filter(schema::projects::team_id.eq(team_id))
+                .first::<models::Project>(conn)?;
+
+            if let Some(id) = project.id {
+                diesel::update(schema::projects::table.find(id))
+                    .set(&new_project)
+                    .execute(conn)?;
+            }
+
+            Ok(())
+        })
+        .await?;
+
+        Ok(())
+    }
+
+    pub async fn get_projects_by_user_id(
+        &self,
+        user_id: i32,
+    ) -> anyhow::Result<Vec<models::Project>> {
+        self.query_wrapper(move |conn| {
+            let teams = schema::teams::table
+                .filter(schema::teams::user_id.eq(user_id))
+                .select(schema::teams::id)
+                .load::<i32>(conn)?;
+
+            let mut projects = Vec::new();
+
+            for team_id in teams {
+                let project = schema::projects::table
+                    .filter(schema::projects::team_id.eq(team_id))
+                    .first::<models::Project>(conn)
+                    .optional()?;
+
+                if let Some(project) = project {
+                    projects.push(project);
+                }
+            }
+
+            Ok(projects)
+        })
+        .await
+    }
+
+    pub async fn create_image(&self, new_image: models::Image) -> anyhow::Result<i32> {
+        self.query_wrapper(move |conn| {
+            diesel::insert_into(schema::gallery::table)
+                .values(&new_image)
+                .returning(schema::gallery::id)
+                .get_result(conn)
+        })
+        .await
+    }
+
+    pub async fn delete_image_by_id(&self, id: i32) -> anyhow::Result<models::Image> {
+        self.query_wrapper(move |conn| {
+            let image = schema::gallery::table.find(id).first(conn)?;
+            diesel::delete(schema::gallery::table.find(id)).execute(conn)?;
+            Ok(image)
+        })
+        .await
+    }
+
+    pub async fn get_image_by_id(&self, id: i32) -> anyhow::Result<Option<models::Image>> {
+        self.query_wrapper(move |conn| schema::gallery::table.find(id).first(conn).optional())
+            .await
+    }
+
+    pub async fn get_images_by_event_id(
+        &self,
+        event_id: i32,
+    ) -> anyhow::Result<Vec<models::Image>> {
+        self.query_wrapper(move |conn| {
+            schema::gallery::table
+                .filter(schema::gallery::event_id.eq(event_id))
+                .load(conn)
+        })
+        .await
+    }
+
+    pub async fn get_events_with_images(
+        &self,
+    ) -> anyhow::Result<Vec<(String, Vec<models::Image>)>> {
+        self.query_wrapper(move |conn| {
+            let events = schema::events::table
+                .select((schema::events::id, schema::events::title))
+                .load::<(i32, String)>(conn)?;
+
+            let mut result = Vec::new();
+            for (event_id, event_title) in events {
+                let images = schema::gallery::table
+                    .filter(schema::gallery::event_id.eq(event_id))
+                    .load::<models::Image>(conn)?;
+
+                result.push((event_title, images));
+            }
+
+            Ok(result)
+        })
+        .await
+    }
+
+    pub async fn get_teams_with_project_and_members_by_event_id(
+        &self,
+        event_id: i32,
+    ) -> anyhow::Result<
+        Vec<(
+            models::Team,
+            Option<(models::Project, String)>,
+            Vec<(String, String)>,
+        )>,
+    > {
+        self.query_wrapper(move |conn| {
+            let teams = schema::teams::table
+                .filter(schema::teams::event_id.eq(event_id))
+                .load::<models::Team>(conn)?;
+
+            let mut result = Vec::new();
+            for team in teams {
+                if let Some(team_id) = team.id {
+                    let project = schema::projects::table
+                        .filter(schema::projects::team_id.eq(team_id))
+                        .first::<models::Project>(conn)
+                        .optional()?;
+
+                    let project = if let Some(project) = project {
+                        let sponsor = schema::sponsors::table
+                            .filter(schema::sponsors::id.eq(project.sponsor_id))
+                            .select(schema::sponsors::name)
+                            .first::<String>(conn)?;
+
+                        Some((project, sponsor))
+                    } else {
+                        None
+                    };
+
+                    let members = schema::members::table
+                        .inner_join(schema::users::table)
+                        .filter(schema::members::team_id.eq(team_id))
+                        .select((
+                            schema::users::firstname
+                                .concat(" ")
+                                .concat(schema::users::lastname),
+                            schema::users::personal_email,
+                        ))
+                        .load::<(String, String)>(conn)?;
+
+                    result.push((team, project, members));
+                }
+            }
+
+            Ok(result)
         })
         .await
     }

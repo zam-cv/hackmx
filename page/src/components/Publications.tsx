@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import api, { type Post } from "@/utils/api"
 import { getQueryParam } from "@/utils"
 import { format } from "date-fns"
+import Bug from "@/components/models/Bug"
 
 function Publication({
   title,
@@ -57,6 +58,9 @@ export default function Publications() {
             content={post.description}
           />
         ))}
+      </div>
+      <div className="h-64">
+        <Bug />
       </div>
     </div>
   )

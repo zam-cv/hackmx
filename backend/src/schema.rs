@@ -143,6 +143,22 @@ diesel::table! {
 }
 
 diesel::table! {
+    projects (id) {
+        id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+        #[max_length = 500]
+        url -> Varchar,
+        sponsor_id -> Int4,
+        team_id -> Int4,
+        #[max_length = 200]
+        zip -> Varchar,
+        #[max_length = 1000]
+        description -> Varchar,
+    }
+}
+
+diesel::table! {
     members (id) {
         id -> Int4,
         team_id -> Int4,
@@ -152,6 +168,15 @@ diesel::table! {
 
 diesel::table! {
     documents (id) {
+        id -> Int4,
+        event_id -> Int4,
+        #[max_length = 100]
+        name -> Varchar,
+    }
+}
+
+diesel::table! {
+    gallery (id) {
         id -> Int4,
         event_id -> Int4,
         #[max_length = 100]
@@ -203,9 +228,12 @@ diesel::joinable!(awards -> event_sponsors (event_sponsor_id));
 diesel::joinable!(event_tasks -> events (event_id));
 diesel::joinable!(teams -> events (event_id));
 diesel::joinable!(teams -> users (user_id));
+diesel::joinable!(projects -> teams (team_id));
+diesel::joinable!(projects -> sponsors (sponsor_id));
 diesel::joinable!(members -> teams (team_id));
 diesel::joinable!(members -> users (user_id));
 diesel::joinable!(documents -> events (event_id));
+diesel::joinable!(gallery -> events (event_id));
 diesel::joinable!(publications -> events (event_id));
 diesel::joinable!(messages -> events (event_id));
 diesel::joinable!(messages -> users (user_id));
@@ -223,8 +251,10 @@ diesel::allow_tables_to_appear_in_same_query!(
     awards,
     event_tasks,
     teams,
+    projects,
     members,
     documents,
+    gallery,
     publications,
     messages,
     fqa,

@@ -23,6 +23,8 @@ import Publications from "./pages/events/Publications";
 import Sponsors from "./pages/events/Sponsors";
 import UniversitiesEvent from "./pages/events/Universities";
 import Scheduling from "./pages/events/Scheduling";
+import Gallery from "./pages/events/Gallery";
+import Teams from "./pages/events/Teams";
 import FQA from "./pages/events/FQA";
 import More from "./pages/events/More";
 
@@ -119,6 +121,22 @@ function App() {
                   element={
                     <Protected>
                       <UniversitiesEvent />
+                    </Protected>
+                  }
+                />
+                <Route
+                  path="/events/:id/gallery"
+                  element={
+                    <Protected>
+                      <Gallery />
+                    </Protected>
+                  }
+                />
+                <Route
+                  path="/events/:id/teams"
+                  element={
+                    <Protected>
+                      <Teams />
                     </Protected>
                   }
                 />

@@ -2,10 +2,11 @@
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Avatar from "@/components/Avatar";
+import Projecs from "@/components/Projects";
 import "@/styles/globals.css";
 ---
 
-<Layout title="HACKMX - Proyectos">
+<Layout title="HackMx - Proyectos">
   <Header slot="header" withMenu={false} mainRoute="/dashboard">
     <Avatar slot="avatar" visible client:only />
   </Header>
@@ -14,6 +15,7 @@ import "@/styles/globals.css";
       class="w-full md:h-[calc(100vh-8rem)] h-[calc(100vh-7rem)] p-10"
     >
       <h1 class="text-4xl text-center font-bold">Proyectos</h1>
+      <Projecs client:only />
     </div>
   </div>
 </Layout>
