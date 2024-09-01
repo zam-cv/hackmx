@@ -25,9 +25,9 @@ impl Upload for UploadForm {
     }
 }
 
-pub struct DocumentsService<'a>(pub &'a Database);
+pub struct ProjectsService<'a>(pub &'a Database);
 
-impl<'a> DocService<models::Project, UploadForm> for DocumentsService<'a> {
+impl<'a> DocService<models::Project, UploadForm> for ProjectsService<'a> {
     fn folder(&self) -> &str {
         "private/projects"
     }
@@ -89,7 +89,7 @@ async fn upload_file(
                 return Ok(HttpResponse::BadRequest().finish());
             }
 
-            let service = DocumentsService(&database);
+            let service = ProjectsService(&database);
             if let Ok(mut doc) = service.save_file(form, document).await {
                 service.transform(&mut doc);
                 return Ok(HttpResponse::Ok().json(doc));
@@ -115,7 +115,7 @@ pub async fn update_file(
             .await
         {
             let name = form.json.zip.clone();
-            let service = DocumentsService(&database);
+            let service = ProjectsService(&database);
 
             form.json.team_id = team_id;
             let mut document = form.json.clone();

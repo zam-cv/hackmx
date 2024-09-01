@@ -1,4 +1,12 @@
-use crate::{config, models, schema};
+use crate::{
+    config,
+    controllers::{
+        admin::{documents::DocumentsService, gallery::GalleryService},
+        projects::ProjectsService,
+    },
+    models, schema,
+    utils::documents::DocService,
+};
 use actix_web::web;
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager, PooledConnection};
@@ -622,7 +630,36 @@ impl Database {
         .await
     }
 
+    pub async fn get_projects_by_event_id(
+        &self,
+        event_id: i32,
+    ) -> anyhow::Result<Vec<models::Project>> {
+        self.query_wrapper(move |conn| {
+            schema::teams::table
+                .inner_join(schema::projects::table)
+                .filter(schema::teams::event_id.eq(event_id))
+                .select(schema::projects::all_columns)
+                .load(conn)
+        })
+        .await
+    }
+
     pub async fn delete_event_by_id(&self, id: i32) -> anyhow::Result<()> {
+        let mut documents = self.get_documents_by_event_id(id).await?;
+
+        let service = DocumentsService(&self);
+        service.transform_all(&mut documents);
+
+        let mut projects = self.get_projects_by_event_id(id).await?;
+
+        let service = ProjectsService(&self);
+        service.transform_all(&mut projects);
+
+        let mut gallery = self.get_images_by_event_id(id).await?;
+
+        let service = GalleryService(&self);
+        service.transform_all(&mut gallery);
+
         self.query_wrapper(move |conn| {
             diesel::delete(
                 schema::event_participants::table
@@ -655,21 +692,45 @@ impl Database {
             )
             .execute(conn)?;
 
-            let documents = schema::documents::table
-                .filter(schema::documents::event_id.eq(id))
-                .load::<models::Document>(conn)?;
-
             for document in documents {
-                if let Some(id) = document.id {
-                    let filename = format!("./uploads/{}-{}", id, document.name);
+                let filename = format!("./{}", document.name);
 
-                    if let Err(_) = std::fs::remove_file(filename.clone()) {
-                        log::error!("Failed to remove file: {}", filename);
-                    }
+                if let Err(_) = std::fs::remove_file(filename.clone()) {
+                    log::error!("Failed to remove file: {}", filename);
+                }
+            }
+
+            for project in projects {
+                let filename = format!("./{}", project.zip);
+
+                if let Err(_) = std::fs::remove_file(filename.clone()) {
+                    log::error!("Failed to remove file: {}", filename);
+                }
+            }
+
+            for image in gallery {
+                let filename = format!("./{}", image.name);
+
+                if let Err(_) = std::fs::remove_file(filename.clone()) {
+                    log::error!("Failed to remove file: {}", filename);
                 }
             }
 
             diesel::delete(schema::documents::table.filter(schema::documents::event_id.eq(id)))
+                .execute(conn)?;
+
+            diesel::delete(
+                schema::projects::table.filter(
+                    schema::projects::team_id.eq_any(
+                        schema::teams::table
+                            .filter(schema::teams::event_id.eq(id))
+                            .select(schema::teams::id),
+                    ),
+                ),
+            )
+            .execute(conn)?;
+
+            diesel::delete(schema::gallery::table.filter(schema::gallery::event_id.eq(id)))
                 .execute(conn)?;
 
             let sponsor_ids = schema::event_sponsors::table
@@ -1156,6 +1217,18 @@ impl Database {
             }
 
             Ok(())
+        })
+        .await?;
+
+        Ok(())
+    }
+
+    pub async fn delete_team_by_id(&self, team_id: i32) -> anyhow::Result<()> {
+        self.query_wrapper(move |conn| {
+            diesel::delete(schema::members::table.filter(schema::members::team_id.eq(team_id)))
+                .execute(conn)?;
+
+            diesel::delete(schema::teams::table.find(team_id)).execute(conn)
         })
         .await?;
 

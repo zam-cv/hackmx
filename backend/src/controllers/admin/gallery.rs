@@ -29,9 +29,9 @@ impl Upload for UploadForm {
   }
 }
 
-pub struct DocumentsService<'a>(pub &'a Database);
+pub struct GalleryService<'a>(pub &'a Database);
 
-impl<'a> DocService<models::Image, UploadForm> for DocumentsService<'a> {
+impl<'a> DocService<models::Image, UploadForm> for GalleryService<'a> {
   fn folder(&self) -> &str {
       "uploads/gallery"
   }
@@ -65,7 +65,7 @@ async fn upload_file(
       name: form.json.name.clone(),
   };
 
-  let service = DocumentsService(&database);
+  let service = GalleryService(&database);
   if let Ok(mut doc) = service.save_file(form, document).await {
       service.transform(&mut doc);
       return Ok(HttpResponse::Ok().json(doc));
@@ -77,7 +77,7 @@ async fn upload_file(
 #[delete("/delete/{id}")]
 async fn delete_document(database: web::Data<Database>, id: web::Path<i32>) -> HttpResponse {
   let id = id.into_inner();
-  let service = DocumentsService(&database);
+  let service = GalleryService(&database);
 
   if let Ok(_) = service.delete_file(id).await {
       return HttpResponse::Ok().finish();
@@ -96,7 +96,7 @@ pub async fn get_documents(
       .await
   {
       Ok(mut documents) => {
-          let service = DocumentsService(&database);
+          let service = GalleryService(&database);
           service.transform_all(&mut documents);
           Ok(HttpResponse::Ok().json(documents))
       }

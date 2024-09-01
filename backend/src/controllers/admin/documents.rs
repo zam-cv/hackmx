@@ -13,7 +13,7 @@ struct Metadata {
 }
 
 #[derive(Debug, MultipartForm)]
-struct UploadForm {
+pub struct UploadForm {
     #[multipart(limit = "10MB")]
     file: TempFile,
     json: MpJson<Metadata>,
@@ -29,7 +29,7 @@ impl Upload for UploadForm {
     }
 }
 
-struct DocumentsService<'a>(pub &'a Database);
+pub struct DocumentsService<'a>(pub &'a Database);
 
 impl<'a> DocService<models::Document, UploadForm> for DocumentsService<'a> {
     fn folder(&self) -> &str {

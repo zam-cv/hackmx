@@ -57,6 +57,6 @@ pub async fn database_setup(database: &Database) {
     std::fs::create_dir_all("./uploads/documents").unwrap();
     std::fs::create_dir_all("./uploads/sponsors").unwrap();
     std::fs::create_dir_all("./uploads/universities").unwrap();
-    std::fs::create_dir_all("./uploads/projects").unwrap();
     std::fs::create_dir_all("./uploads/gallery").unwrap();
+    std::fs::create_dir_all("./private/projects").unwrap();
 }

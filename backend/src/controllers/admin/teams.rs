@@ -1,7 +1,7 @@
 use crate::{
-    controllers::projects::DocumentsService, database::Database, utils::documents::DocService,
+    controllers::projects::ProjectsService, database::Database, utils::documents::DocService,
 };
-use actix_web::{get, web, Error, HttpResponse, Result};
+use actix_web::{delete, get, web, Error, HttpResponse, Result};
 
 #[get("/{event_id}")]
 pub async fn get_teams(
@@ -13,7 +13,7 @@ pub async fn get_teams(
         .await
     {
         Ok(mut teams) => {
-            let service = DocumentsService(&database);
+            let service = ProjectsService(&database);
 
             for team in teams.iter_mut() {
                 if let (_, Some((project, _)), _) = team {
@@ -22,11 +22,22 @@ pub async fn get_teams(
             }
 
             Ok(HttpResponse::Ok().json(teams))
-        },
+        }
         Err(_) => Ok(HttpResponse::InternalServerError().finish()),
     }
 }
 
+#[delete("/{team_id}")]
+pub async fn delete_team(database: web::Data<Database>, team_id: web::Path<i32>) -> HttpResponse {
+    if let Ok(_) = database.delete_team_by_id(team_id.into_inner()).await {
+        return HttpResponse::Ok().finish();
+    }
+
+    HttpResponse::InternalServerError().finish()
+}
+
 pub fn routes() -> actix_web::Scope {
-    web::scope("/teams").service(get_teams)
+    web::scope("/teams")
+        .service(get_teams)
+        .service(delete_team)
 }
