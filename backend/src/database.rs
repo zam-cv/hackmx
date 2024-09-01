@@ -662,24 +662,6 @@ impl Database {
 
         self.query_wrapper(move |conn| {
             diesel::delete(
-                schema::event_participants::table
-                    .filter(schema::event_participants::event_id.eq(id)),
-            )
-            .execute(conn)?;
-
-            let team_ids = schema::teams::table
-                .filter(schema::teams::event_id.eq(id))
-                .select(schema::teams::id)
-                .load::<i32>(conn)?;
-
-            for team_id in team_ids {
-                diesel::delete(schema::members::table.filter(schema::members::team_id.eq(team_id)))
-                    .execute(conn)?;
-
-                diesel::delete(schema::teams::table.find(team_id)).execute(conn)?;
-            }
-
-            diesel::delete(
                 schema::publications::table.filter(schema::publications::event_id.eq(id)),
             )
             .execute(conn)?;
@@ -700,11 +682,33 @@ impl Database {
                 }
             }
 
-            for project in projects {
-                let filename = format!("./{}", project.zip);
+            let base_path = std::path::Path::new("./private/projects")
+                .canonicalize()
+                .expect("Failed to canonicalize base path");
 
-                if let Err(_) = std::fs::remove_file(filename.clone()) {
-                    log::error!("Failed to remove file: {}", filename);
+            for project in projects {
+                if project.zip.is_empty() {
+                    continue;
+                }
+
+                let filename = format!("./{}", project.zip);
+                let path = std::path::Path::new(&filename);
+
+                if let Ok(normalized_path) = path.canonicalize() {
+                    if normalized_path.starts_with(&base_path) {
+                        if let Err(_) = std::fs::remove_file(&normalized_path) {
+                            log::error!("Failed to remove file: {:?}", normalized_path);
+                        } else {
+                            log::info!("Successfully removed file: {:?}", normalized_path);
+                        }
+                    } else {
+                        log::warn!(
+                            "Attempt to delete file outside of allowed directory: {:?}",
+                            normalized_path
+                        );
+                    }
+                } else {
+                    log::error!("Failed to normalize path: {}", filename);
                 }
             }
 
@@ -733,6 +737,24 @@ impl Database {
             diesel::delete(schema::gallery::table.filter(schema::gallery::event_id.eq(id)))
                 .execute(conn)?;
 
+            diesel::delete(
+                schema::event_participants::table
+                    .filter(schema::event_participants::event_id.eq(id)),
+            )
+            .execute(conn)?;
+
+            let team_ids = schema::teams::table
+                .filter(schema::teams::event_id.eq(id))
+                .select(schema::teams::id)
+                .load::<i32>(conn)?;
+
+            for team_id in team_ids {
+                diesel::delete(schema::members::table.filter(schema::members::team_id.eq(team_id)))
+                    .execute(conn)?;
+
+                diesel::delete(schema::teams::table.find(team_id)).execute(conn)?;
+            }
+
             let sponsor_ids = schema::event_sponsors::table
                 .filter(schema::event_sponsors::event_id.eq(id))
                 .select(schema::event_sponsors::sponsor_id)
@@ -751,6 +773,12 @@ impl Database {
                 )
                 .execute(conn)?;
             }
+
+            diesel::delete(schema::messages::table.filter(schema::messages::event_id.eq(id)))
+                .execute(conn)?;
+
+            diesel::delete(schema::fqa::table.filter(schema::fqa::event_id.eq(id)))
+                .execute(conn)?;
 
             diesel::delete(
                 schema::event_sponsors::table.filter(schema::event_sponsors::event_id.eq(id)),
@@ -1224,8 +1252,46 @@ impl Database {
     }
 
     pub async fn delete_team_by_id(&self, team_id: i32) -> anyhow::Result<()> {
+        let mut project = self.get_project_by_team_id(team_id).await?;
+
+        if let Some(ref mut project) = &mut project {
+            let service = ProjectsService(&self);
+            service.transform(project);
+        }
+
         self.query_wrapper(move |conn| {
             diesel::delete(schema::members::table.filter(schema::members::team_id.eq(team_id)))
+                .execute(conn)?;
+
+            if let Some(project) = project {
+                if !project.zip.is_empty() {
+                    let base_path = std::path::Path::new("./private/projects")
+                        .canonicalize()
+                        .expect("Failed to canonicalize base path");
+
+                    let filename = format!("./{}", project.zip);
+                    let path = std::path::Path::new(&filename);
+
+                    if let Ok(normalized_path) = path.canonicalize() {
+                        if normalized_path.starts_with(&base_path) {
+                            if let Err(_) = std::fs::remove_file(&normalized_path) {
+                                log::error!("Failed to remove file: {:?}", normalized_path);
+                            } else {
+                                log::info!("Successfully removed file: {:?}", normalized_path);
+                            }
+                        } else {
+                            log::warn!(
+                                "Attempt to delete file outside of allowed directory: {:?}",
+                                normalized_path
+                            );
+                        }
+                    } else {
+                        log::error!("Failed to normalize path: {}", filename);
+                    }
+                }
+            }
+
+            diesel::delete(schema::projects::table.filter(schema::projects::team_id.eq(team_id)))
                 .execute(conn)?;
 
             diesel::delete(schema::teams::table.find(team_id)).execute(conn)
@@ -1567,6 +1633,16 @@ impl Database {
 
     pub async fn create_message(&self, new_message: models::Message) -> anyhow::Result<i32> {
         self.query_wrapper(move |conn| {
+            let count = schema::messages::table
+                .filter(schema::messages::event_id.eq(new_message.event_id))
+                .filter(schema::messages::user_id.eq(new_message.user_id))
+                .count()
+                .get_result::<i64>(conn)?;
+
+            if count >= 10 {
+                return Err(diesel::result::Error::RollbackTransaction);
+            }
+
             diesel::insert_into(schema::messages::table)
                 .values(&new_message)
                 .returning(schema::messages::id)

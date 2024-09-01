@@ -390,6 +390,9 @@ export default {
   teams: {
     getTeams: (event_id: number): Promise<[Team, [Project, string] | null, [string, string][]][]> => {
       return get(`/admin/teams/${event_id}`);
-    }
+    },
+    deleteTeam: (team_id: number): Promise<void> => {
+      return del(`/admin/teams/${team_id}`);
+    },
   }
 };
