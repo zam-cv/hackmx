@@ -75,6 +75,7 @@ pub async fn middleware(
                 log::error!("Expired token");
                 let cookie = utils::get_cookie_with_expired_token(cookie_name);
                 let response = HttpResponse::Unauthorized().cookie(cookie).finish();
+
                 return Ok(req.into_response(response).map_into_right_body());
             }
 
@@ -87,6 +88,38 @@ pub async fn middleware(
     log::error!("Unauthorized");
     let response = HttpResponse::Unauthorized().finish();
     Ok(req.into_response(response).map_into_right_body())
+}
+
+pub async fn is_authenticated(
+    req: &ServiceRequest,
+    secret_key: &String,
+    cookie_name: &'static str,
+) -> Result<Option<i32>, Error> {
+    let token = match req.cookie(cookie_name) {
+        // supoort for cookies
+        Some(cookie) => Some(cookie.value().to_string()),
+        None => match req.headers().get("Authorization") {
+            // support for headers
+            Some(header) => header.to_str().map(|s| s.to_string()).ok(),
+            // support for websockets
+            None => support_websockets(&req),
+        },
+    };
+
+    if let Some(token) = token {
+        // Check if the token is valid
+        let token = token.replace("Bearer ", "");
+        if let Ok(claims) = utils::decode_token(secret_key, &token) {
+            if claims.exp < chrono::Utc::now().timestamp() as usize {
+                return Ok(None);
+            }
+
+            return Ok(Some(claims.id));
+        }
+    }
+
+    log::error!("Unauthorized");
+    Ok(None)
 }
 
 pub trait User {
@@ -195,7 +228,9 @@ pub trait Auth<Model: Validate + User + DeserializeOwned + 'static> {
             .route("/logout", web::get().to(default_logout::<Self, Model>))
             .service(
                 web::scope("")
-                    .wrap(from_fn(move |req, srv| middleware(req, srv, &secret_key, cookie_name)))
+                    .wrap(from_fn(move |req, srv| {
+                        middleware(req, srv, &secret_key, cookie_name)
+                    }))
                     .route("/verify", web::get().to(default_verify::<Self, Model>)),
             )
     }
@@ -225,7 +260,9 @@ pub trait ExtendedAuth<Model: Validate + User + DeserializeOwned + 'static>: Aut
             .route("/logout", web::get().to(extended_logout::<Self, Model>))
             .service(
                 web::scope("")
-                    .wrap(from_fn(move |req, srv| middleware(req, srv, &secret_key, cookie_name)))
+                    .wrap(from_fn(move |req, srv| {
+                        middleware(req, srv, &secret_key, cookie_name)
+                    }))
                     .route("/verify", web::get().to(extended_verify::<Self, Model>)),
             )
     }

@@ -1,13 +1,15 @@
 use crate::{config, controllers, database::Database, middlewares};
 use actix_cors::Cors;
+use actix_files as fs;
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use actix_web_lab::middleware::from_fn;
-use actix_files as fs;
+use cfg_if::cfg_if;
 use std::env;
 
 pub async fn app() -> std::io::Result<()> {
     // Create Database instance
     let database = Database::new();
+    config::run_migration(&mut database.get_connection().unwrap());
     log::info!("Database connection established");
 
     // Setup the database
@@ -15,13 +17,12 @@ pub async fn app() -> std::io::Result<()> {
 
     // Get the HOST and PORT environment variables
     let host = env::var("HOST").unwrap_or("0.0.0.0".to_string());
-    let port = env::var("PORT").unwrap_or("8080".to_string());
+    let port = env::var("PORT").unwrap_or("80".to_string());
 
     // Start the HTTP server
     log::info!("Starting the server");
-    log::info!("Listening on http://{}:{}", host, port);
 
-    HttpServer::new(move || {
+    let server = HttpServer::new(move || {
         App::new()
             // Enable logger and CORS middleware
             .wrap(Cors::permissive().supports_credentials())
@@ -46,17 +47,20 @@ pub async fn app() -> std::io::Result<()> {
                             .service(controllers::admin::participant::routes())
                             .service(controllers::admin::gallery::routes())
                             .service(controllers::admin::teams::routes())
-                            .service(controllers::tec::routes())
+                            .service(controllers::tec::routes()),
                     )
+                    // public
                     .service(controllers::sponsor::routes())
                     .service(controllers::tec::routes())
-                    .service(web::scope("")
-                        .wrap(from_fn(middlewares::user_middleware))
-                        .service(controllers::event::routes())
-                        .service(controllers::user::routes())
-                        .service(controllers::projects::routes())
-                        .service(controllers::gallery::routes())
-                    )
+                    .service(controllers::gallery::routes())
+                    .service(
+                        web::scope("")
+                            // private
+                            .wrap(from_fn(middlewares::user_middleware))
+                            .service(controllers::event::routes())
+                            .service(controllers::user::routes())
+                            .service(controllers::projects::routes()),
+                    ),
             )
             // Private
             .service(
@@ -64,22 +68,35 @@ pub async fn app() -> std::io::Result<()> {
                     .wrap(from_fn(middlewares::admin_middleware))
                     .service(
                         // Static files
-                        fs::Files::new("/", "./private")
-                        .show_files_listing()
-                    )
+                        fs::Files::new("/", "./private").show_files_listing(),
+                    ),
             )
             .service(
                 // Static files
-                fs::Files::new("/uploads", "./uploads")
-                    .show_files_listing(),
+                fs::Files::new("/uploads", "./uploads").show_files_listing(),
             )
             .service(
-                fs::Files::new("/", "./page/")
-                    .show_files_listing()
-                    .index_file("index.html")
+                web::scope("")
+                    .wrap(from_fn(middlewares::redirect_middleware))
+                    .service(
+                        fs::Files::new("/", "./page/")
+                            .show_files_listing()
+                            .index_file("index.html"),
+                    ),
             )
-    })
-    .bind(format!("{}:{}", host, port))?
-    .run()
-    .await
+    });
+
+    cfg_if! {
+        if #[cfg(feature = "production")] {
+            log::info!("Listening on https://{}:{}", host, port);
+            server.bind(format!("{}:{}", host, port))?
+                .run()
+                .await
+        } else {
+            log::info!("Listening on http://{}:{}", host, port);
+            server.bind(format!("{}:{}", host, port))?
+                .run()
+                .await
+        }
+    }
 }

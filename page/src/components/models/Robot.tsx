@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useGLTF, useAnimations, OrbitControls, Bounds, useBounds } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
+import Loader from './Loader';
 import * as THREE from 'three';
 
 function Model() {
@@ -67,6 +68,7 @@ export default function Robot() {
         />
 
         <Model />
+        <Loader />
       </Bounds>
     </Canvas>
   );

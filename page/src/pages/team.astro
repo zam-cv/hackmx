@@ -1,0 +1,25 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import LinkAsButton from "@/components/LinkAsButton.astro";
+import MainNav from "@/components/MainNav.astro";
+import Groups from "@/components/Groups";
+import "@/styles/globals.css";
+---
+
+<Layout title="HackMx - Equipo">
+  <Header slot="header" withMenu mainRoute="/">
+    <MainNav slot="nav" />
+    <Fragment slot="action">
+      <LinkAsButton href="/login">Inscribirse</LinkAsButton>
+    </Fragment>
+  </Header>
+  <div slot="content" class="w-full">
+    <div class="w-full md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-7rem)]">
+      <h1 class="text-4xl text-center font-bold pt-10">Equipo</h1>
+      <div class="w-full h-full px-10 py-10">
+        <Groups client:only />
+      </div>
+    </div>
+  </div>
+</Layout>

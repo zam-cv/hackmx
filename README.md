@@ -58,6 +58,11 @@ ADMIN_COOKIE_NAME=token_platform
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=awdrqwer12
 POSTGRES_DB=hackmx
+
+SMTP_HOST=smtp-mail.outlook.com
+SMTP_USERNAME=test@outlook.com
+SMTP_PASSWORD=test
+SMTP_SENDER="HackMx <test@outlook.com>"
 ```
 
 - Create a `.env` file inside the page folder and add the following environment variables:

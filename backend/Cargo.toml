@@ -3,6 +3,9 @@ name = "backend"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+production = []
+
 [dependencies]
 actix = "0.13.3"
 actix-web = "4.6.0"
@@ -29,3 +32,10 @@ strum = "0.26.3"
 strum_macros = "0.26.4"
 once_cell = "1.19.0"
 regex = "1.10.5"
+lettre = "0.11.7"
+tokio = "1.40.0"
+diesel_migrations = "2.2.0"
+cfg-if = "1.0.0"
+
+[build-dependencies]
+dotenv = "0.15.0"

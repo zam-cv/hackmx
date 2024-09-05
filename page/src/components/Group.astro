@@ -1,0 +1,24 @@
+---
+interface Props {
+  name: string;
+  list: [string, string, string | null][];
+  gap?: number;
+}
+
+const { name, list, gap } = Astro.props;
+---
+<div class="bg-p-secondary-background rounded-lg p-4 py-6">
+  <div class="text-center font-bold pb-4">
+    {name}
+  </div>
+  <div class="flex flex-col gap-4" style={`gap: ${gap}rem;`}>
+    {
+      list.map(([name, email, role]) => (
+        <div class={role ? "grid grid-cols-[3fr_2fr] gap-8" : ""}>
+          <p class="text-sm">{name} <span>(<a class="underline" href={"mailto:" + email}>{email}</a>)</span></p>
+          {role && <p class="text-sm flex justify-center items-center text-center">{role}</p>}
+        </div>
+      ))
+    }
+  </div>
+</div>

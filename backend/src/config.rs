@@ -1,17 +1,32 @@
 use crate::{database::Database, models, utils};
+use diesel::PgConnection;
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use lazy_static::lazy_static;
+use cfg_if::cfg_if;
 use std::env;
+
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 lazy_static! {
     pub static ref USER_SECRET_KEY: String = env::var("USER_SECRET_KEY").expect("USER_SECRET_KEY must be set");
     pub static ref ADMIN_SECRET_KEY: String = env::var("ADMIN_SECRET_KEY").expect("ADMIN_SECRET_KEY must be set");
     pub static ref USER_COOKIE_NAME: String = env::var("USER_COOKIE_NAME").expect("USER_COOKIE_NAME must be set");
     pub static ref ADMIN_COOKIE_NAME: String = env::var("ADMIN_COOKIE_NAME").expect("ADMIN_COOKIE_NAME must be set");
+    pub static ref SMTP_HOST: String = env::var("SMTP_HOST").expect("SMTP_HOST must be set");
+    pub static ref SMTP_USERNAME: String = env::var("SMTP_USERNAME").expect("SMTP_USERNAME must be set");
+    pub static ref SMTP_PASSWORD: String = env::var("SMTP_PASSWORD").expect("SMTP_PASSWORD must be set");
+    pub static ref SMTP_SENDER: String = env::var("SMTP_SENDER").expect("SMTP_SENDER must be set");
 }
 
 // constants
+pub const EVENT: &str = "https://www.hackmx.mx/event/?id=";
 pub const TOKEN_EXPIRATION_TIME: usize = 60 * 60 * 24 * 15; // 15 days
 pub const MAX_POOL_SIZE: u32 = 5; // Database connection pool size
+
+
+pub fn run_migration(conn: &mut PgConnection) {
+    conn.run_pending_migrations(MIGRATIONS).unwrap();
+}
 
 async fn create_default_admin(database: &Database) -> anyhow::Result<()> {
     let email = env::var("ADMIN_DEFAULT_EMAIL").expect("ADMIN_DEFAULT_EMAIL must be set");
@@ -52,6 +67,12 @@ pub async fn database_setup(database: &Database) {
     // Create the uploads directory
     std::fs::create_dir_all("./uploads").unwrap();
     std::fs::create_dir_all("./private").unwrap();
+
+    cfg_if! {
+        if #[cfg(feature = "production")] {
+            std::fs::create_dir_all("./cert").unwrap();
+        }
+    }
 
     // Create the subdirectories
     std::fs::create_dir_all("./uploads/documents").unwrap();

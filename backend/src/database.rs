@@ -82,6 +82,17 @@ impl Database {
         .await
     }
 
+    pub async fn get_emails_by_event_id(&self, event_id: i32) -> anyhow::Result<Vec<String>> {
+        self.query_wrapper(move |conn| {
+            schema::event_participants::table
+                .filter(schema::event_participants::event_id.eq(event_id))
+                .inner_join(schema::users::table)
+                .select(schema::users::email)
+                .load(conn)
+        })
+        .await
+    }
+
     pub async fn get_user_by_id(&self, id: i32) -> anyhow::Result<Option<models::User>> {
         self.query_wrapper(move |conn| schema::users::table.find(id).first(conn).optional())
             .await

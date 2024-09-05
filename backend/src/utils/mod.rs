@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 
 pub mod auth;
 pub mod documents;
+pub mod mail;
 
 // Is the information that we want to store in the token
 #[derive(Debug, Serialize, Deserialize)]
