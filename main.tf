@@ -66,6 +66,8 @@ resource "digitalocean_droplet" "app" {
     usermod -aG docker admin
     docker run -d --name app-server \
       --restart always \
+      -p 443:443 \
+      -p 80:80 \
       -p ${var.port}:${var.port} \
       -e RUST_LOG=${var.rust_log} \
       -e HOST=${var.host} \
@@ -122,6 +124,17 @@ resource "digitalocean_firewall" "public_firewall" {
   outbound_rule {
     protocol              = "udp"
     port_range            = "1-65535"
+    destination_addresses = ["0.0.0.0/0"]
+  }
+
+  outbound_rule {
+    protocol         = "tcp"
+    port_range       = "80"
+    destination_addresses = ["0.0.0.0/0"]
+  }
+
+  outbound_rule {
+    protocol = "icmp"
     destination_addresses = ["0.0.0.0/0"]
   }
 

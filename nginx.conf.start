@@ -1,0 +1,35 @@
+worker_processes auto;
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 80;
+        server_name zamcv.com;
+
+        location /.well-known/acme-challenge/ {
+            root /var/www/certbot;
+        }
+
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name zamcv.com;
+
+        ssl_certificate /etc/letsencrypt/live/zamcv.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/zamcv.com/privkey.pem;
+
+        location / {
+            proxy_pass http://localhost:8080;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+}

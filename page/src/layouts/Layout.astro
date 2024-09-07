@@ -117,4 +117,13 @@ const { title, loading } = Astro.props;
 		width: 100%;
 		height: 100%;
 	}
+
+	* {
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	*::-webkit-scrollbar {
+		display: none;
+	}
 </style>

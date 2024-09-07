@@ -3,7 +3,6 @@ use actix_cors::Cors;
 use actix_files as fs;
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use actix_web_lab::middleware::from_fn;
-use cfg_if::cfg_if;
 use std::env;
 
 pub async fn app() -> std::io::Result<()> {
@@ -86,17 +85,6 @@ pub async fn app() -> std::io::Result<()> {
             )
     });
 
-    cfg_if! {
-        if #[cfg(feature = "production")] {
-            log::info!("Listening on https://{}:{}", host, port);
-            server.bind(format!("{}:{}", host, port))?
-                .run()
-                .await
-        } else {
-            log::info!("Listening on http://{}:{}", host, port);
-            server.bind(format!("{}:{}", host, port))?
-                .run()
-                .await
-        }
-    }
+    log::info!("Listening on https://{}:{}", host, port);
+    server.bind(format!("{}:{}", host, port))?.run().await
 }

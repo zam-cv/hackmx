@@ -2,7 +2,6 @@ use crate::{database::Database, models, utils};
 use diesel::PgConnection;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use lazy_static::lazy_static;
-use cfg_if::cfg_if;
 use std::env;
 
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
@@ -67,12 +66,6 @@ pub async fn database_setup(database: &Database) {
     // Create the uploads directory
     std::fs::create_dir_all("./uploads").unwrap();
     std::fs::create_dir_all("./private").unwrap();
-
-    cfg_if! {
-        if #[cfg(feature = "production")] {
-            std::fs::create_dir_all("./cert").unwrap();
-        }
-    }
 
     // Create the subdirectories
     std::fs::create_dir_all("./uploads/documents").unwrap();
