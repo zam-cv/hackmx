@@ -6,7 +6,7 @@ import {
   History,
   // Wrench,
   Users,
-  // StickyNote,
+  StickyNote,
   LayoutDashboard,
   CircleHelp,
   // Boxes,
@@ -64,9 +64,9 @@ export default function EventDetails({ id }: { id: number }) {
     <Detail id={id} title="Users" description="View and manage users for this event" message="Confirmed, Report ..." route="users">
       <Users className="h-4 w-4 text-muted-foreground" />
     </Detail>
-    {/* <Detail id={id} title="Publications" description="View and manage publications for this event" message="Add, Delete ..." route="publications">
+    <Detail id={id} title="Publications" description="View and manage publications for this event" message="Add, Delete ..." route="publications">
       <StickyNote className="h-4 w-4 text-muted-foreground" />
-    </Detail> */}
+    </Detail>
     <Detail id={id} title="Sponsors" description="Total sponsors for this event" message="Google, Facebook, Microsoft, Apple ..." route="sponsors">
       <Building2 className="h-4 w-4 text-muted-foreground" />
     </Detail>

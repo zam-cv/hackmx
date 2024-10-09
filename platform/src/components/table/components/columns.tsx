@@ -1,51 +1,51 @@
-// import { useState } from "react";
+import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
-// import api from "@/utils/api";
+import api from "@/utils/api";
 
 export const columns: ColumnDef<Task>[] = [
-  // {
-  //   accessorKey: "confirmed",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Confirmed" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const [confirmed, setConfirmed] = useState<boolean>(
-  //       row.getValue("confirmed")
-  //     );
+  {
+    accessorKey: "confirmed",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Confirmed" />
+    ),
+    cell: ({ row }) => {
+      const [confirmed, setConfirmed] = useState<boolean>(
+        row.getValue("confirmed")
+      );
 
-  //     function updateConfirmed(value: boolean) {
-  //       let event_id = row.original.event_id;
-  //       api.participant
-  //         .updateConfirmation(
-  //           parseInt(event_id),
-  //           parseInt(row.original.id),
-  //           `${value}`
-  //         )
-  //         .then(() => {
-  //           setConfirmed(!confirmed);
-  //         });
-  //     }
+      function updateConfirmed(value: boolean) {
+        let event_id = row.original.event_id;
+        api.participant
+          .updateConfirmation(
+            parseInt(event_id),
+            parseInt(row.original.id),
+            `${value}`
+          )
+          .then(() => {
+            setConfirmed(!confirmed);
+          });
+      }
 
-  //     return (
-  //       <div className="flex">
-  //         <Checkbox
-  //           checked={confirmed}
-  //           onCheckedChange={updateConfirmed}
-  //           aria-label="Confirm"
-  //           className="ml-5"
-  //         />
-  //       </div>
-  //     );
-  //   },
-  //   enableSorting: false,
-  //   enableHiding: false,
-  //   filterFn: (row, id, value) => {
-  //     return value.includes(row.getValue(id))
-  //   },
-  // },
+      return (
+        <div className="flex">
+          <Checkbox
+            checked={confirmed}
+            onCheckedChange={updateConfirmed}
+            aria-label="Confirm"
+            className="ml-5"
+          />
+        </div>
+      );
+    },
+    enableSorting: false,
+    enableHiding: false,
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
+  },
   {
     accessorKey: "username",
     header: ({ column }) => (
@@ -109,36 +109,36 @@ export const columns: ColumnDef<Task>[] = [
       return value.includes(row.getValue(id))
     },
   },
-  // {
-  //   accessorKey: "personal_email",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Personal Email" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     return (
-  //       <div className="flex space-x-2">
-  //         <span className="max-w-[500px] truncate font-medium">
-  //           {row.getValue("personal_email")}
-  //         </span>
-  //       </div>
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: "phone",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Phone" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     return (
-  //       <div className="flex space-x-2">
-  //         <span className="max-w-[500px] truncate font-medium">
-  //           {row.getValue("phone")}
-  //         </span>
-  //       </div>
-  //     );
-  //   },
-  // },
+  {
+    accessorKey: "personal_email",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Personal Email" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("personal_email")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "phone",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Phone" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("phone")}
+          </span>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "semester",
     header: ({ column }) => (
@@ -187,21 +187,21 @@ export const columns: ColumnDef<Task>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "email",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Email" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     return (
-  //       <div className="flex space-x-2">
-  //         <span className="max-w-[500px] truncate font-medium">
-  //           {row.getValue("email")}
-  //         </span>
-  //       </div>
-  //     );
-  //   },
-  // },
+  {
+    accessorKey: "email",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("email")}
+          </span>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "with_bus",
     header: ({ column }) => (
