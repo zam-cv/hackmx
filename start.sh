@@ -9,9 +9,9 @@ nginx
 
 sleep 60
 
-certbot certonly --webroot -w /var/www/certbot -d zamcv.com --email hello@zamcv.com --agree-tos -n --keep-until-expiring
+certbot certonly --webroot -w /var/www/certbot -d hackmx.mx --email admin@hackmx.mx --agree-tos -n --keep-until-expiring
 
-if [ -f /etc/letsencrypt/live/zamcv.com/fullchain.pem ] && [ -f /etc/letsencrypt/live/zamcv.com/privkey.pem ]; then
+if [ -f /etc/letsencrypt/live/hackmx.mx/fullchain.pem ] && [ -f /etc/letsencrypt/live/hackmx.mx/privkey.pem ]; then
     cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.init
     mv /etc/nginx/nginx.conf.start /etc/nginx/nginx.conf
     

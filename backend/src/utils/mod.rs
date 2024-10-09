@@ -73,3 +73,17 @@ pub fn get_cookie_with_expired_token(name: &'static str) -> Cookie<'static> {
 pub fn generate_code() -> i32 {
     rand::thread_rng().gen_range(100000..=999999)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_token() {
+        let secret_key = "secret_key".to_string();
+        let id = 1;
+        let token = create_token(&secret_key, id).unwrap();
+        let claims = decode_token(&secret_key, &token).unwrap();
+        assert_eq!(claims.id, id);
+    }
+}

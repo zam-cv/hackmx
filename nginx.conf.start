@@ -6,7 +6,7 @@ events {
 http {
     server {
         listen 80;
-        server_name zamcv.com;
+        server_name hackmx.mx;
 
         location /.well-known/acme-challenge/ {
             root /var/www/certbot;
@@ -19,10 +19,10 @@ http {
 
     server {
         listen 443 ssl;
-        server_name zamcv.com;
+        server_name hackmx.mx;
 
-        ssl_certificate /etc/letsencrypt/live/zamcv.com/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/zamcv.com/privkey.pem;
+        ssl_certificate /etc/letsencrypt/live/hackmx.mx/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/hackmx.mx/privkey.pem;
 
         location / {
             proxy_pass http://localhost:8080;

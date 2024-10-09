@@ -5,7 +5,7 @@ events {
 http {
     server {
         listen 80;
-        server_name zamcv.com;
+        server_name hackmx.mx;
 
         location /.well-known/acme-challenge/ {
             root /var/www/certbot;
