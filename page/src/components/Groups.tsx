@@ -86,6 +86,11 @@ export default function Groups() {
               "a01749089@tec.mx",
               "Coordinador de Finanzas",
             ],
+            [
+              "Fernando Emiliano Tavera Moreno",
+              "a01663082@tec.mx",
+              "Coordinador de Gestión de Proyectos",
+            ],
           ]}
         />
         <Group
@@ -148,6 +153,18 @@ export default function Groups() {
             ["Alejandra Martínez Chargoy", "a01750524@tec.mx"],
             ["Areli Ramírez García", "a01751085@tec.mx"],
             ["Dereck Zayd Ibarra Martínez", "a01752320@tec.mx"],
+          ]}
+          gap={0.5}
+        />
+        <Group
+          name="Gestión de Proyectos"
+          list={[
+            ["Santiago Moreno Lacalle Quintero", "a01663197@tec.mx"],
+            ["José Roberto Garduño", "a01656294@tec.mx"],
+            ["Ariadna Laurent Cienfuegos", "a01655810@tec.mx"],
+            ["Ana Keila Martínez Moreno", "a01666624@tec.mx"],
+            ["Rodrigo Rocha Rosales", "a01784108@tec.mx"],
+            ["Francisco Zuriel Tovar Mendoza", "a01663783@tec.mx"],
           ]}
           gap={0.5}
         />

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+// import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
 import { BreadcrumbInEvent } from "@/components/Breadcrumb";
 import { Input } from "@/components/ui/input"
@@ -19,7 +20,7 @@ import { SERVER } from '@/utils/constants';
 export default function More() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -28,12 +29,12 @@ export default function More() {
     })
   }, [id])
 
-  function handleDelete() {
-    api.events.delete(parseInt(id))
-      .then(() => {
-        navigate('/events')
-      })
-  }
+  // function handleDelete() {
+  //   api.events.delete(parseInt(id))
+  //     .then(() => {
+  //       navigate('/events')
+  //     })
+  // }
 
   function handleDeleteDocument(documentId: number) {
     api.documents.delete(documentId).then(() => {
@@ -63,11 +64,11 @@ export default function More() {
     <BreadcrumbInEvent id={id} name="More" />
     <div className="mx-auto grid w-full max-w-6xl items-start gap-6 px-8">
       <div className="grid gap-6">
-        <div className='flex justify-end'>
+        {/* <div className='flex justify-end'>
           <DeleteWrapper del={() => handleDelete()} message='Are you sure you want to delete this event?'>
             <Button className="font-bold py-2 px-4 rounded text-foreground">Delete Event</Button>
           </DeleteWrapper>
-        </div>
+        </div> */}
         <Card x-chunk="dashboard-04-chunk-2">
           <CardHeader>
             <CardTitle>

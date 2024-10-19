@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { BreadcrumbInEvent } from "@/components/Breadcrumb";
 import api, { Team, Project } from "@/utils/api";
 import { downloadServer } from "@/utils/methods";
-import { DeleteWrapper } from "@/components/Delete";
-import { Trash2 } from "lucide-react";
+// import { DeleteWrapper } from "@/components/Delete";
+// import { Trash2 } from "lucide-react";
 
 export default function Teams() {
   const [teams, setTeams] = useState<
@@ -80,7 +80,7 @@ export default function Teams() {
                     ))}
                   </ul>
                 </div>
-                <div className="absolute top-5 right-5 hidden group-hover/team:block">
+                {/* <div className="absolute top-5 right-5 hidden group-hover/team:block">
                   <DeleteWrapper
                     del={() => del(team.id)}
                     message="You want to delete the team?"
@@ -91,7 +91,7 @@ export default function Teams() {
                       </div>
                     </span>
                   </DeleteWrapper>
-                </div>
+                </div> */}
               </div>
             );
           })}
