@@ -18,11 +18,11 @@ export default function Teams() {
     });
   }, [id]);
 
-  function del(team_id: number) {
-    api.teams.deleteTeam(team_id).then(() => {
-      setTeams(teams.filter((team) => team[0].id !== team_id));
-    });
-  }
+  // function del(team_id: number) {
+  //   api.teams.deleteTeam(team_id).then(() => {
+  //     setTeams(teams.filter((team) => team[0].id !== team_id));
+  //   });
+  // }
 
   return (
     <div>
