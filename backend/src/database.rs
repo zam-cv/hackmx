@@ -636,10 +636,11 @@ impl Database {
         self.query_wrapper(move |conn| {
             schema::event_tasks::table
                 .filter(schema::event_tasks::event_id.eq(event_id))
+                .order_by(schema::event_tasks::id.asc())
                 .load(conn)
         })
         .await
-    }
+    }    
 
     pub async fn get_projects_by_event_id(
         &self,

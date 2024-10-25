@@ -572,17 +572,17 @@ pub fn routes() -> actix_web::Scope {
         )
         .service(
             web::scope("posts/{event_id}")
-                .wrap(from_fn(middlewares::event_not_ended_middleware))
+                // .wrap(from_fn(middlewares::event_not_ended_middleware))
                 .service(get_posts)
         )
         .service(
             web::scope("documents/{event_id}")
-                .wrap(from_fn(middlewares::event_not_ended_middleware))
+                // .wrap(from_fn(middlewares::event_not_ended_middleware))
                 .service(get_documents)
         )
         .service(
             web::scope("update-team/{event_id}")
-                .wrap(from_fn(middlewares::event_not_ended_middleware))
+                // .wrap(from_fn(middlewares::event_not_ended_middleware))
                 .service(update_team_name)
                 .service(update_team_description)
                 .service(update_team_code)
@@ -591,7 +591,7 @@ pub fn routes() -> actix_web::Scope {
         .service(
             web::scope("team/{event_id}")
                 .wrap(from_fn(middlewares::user_in_event_middleware))
-                .wrap(from_fn(middlewares::event_not_started_middleware))
+                // .wrap(from_fn(middlewares::event_not_started_middleware))
                 .service(create_team)
                 .service(get_participant_details)
                 .service(get_team_code)
@@ -605,7 +605,7 @@ pub fn routes() -> actix_web::Scope {
         )
         .service(
             web::scope("/{event_id}")
-                .wrap(from_fn(middlewares::event_not_started_middleware))
+                // .wrap(from_fn(middlewares::event_not_started_middleware))
                 .service(get_event_by_id)
                 .service(register_to_event)
                 .service(get_registration_details),
